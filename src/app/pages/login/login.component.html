@@ -1,0 +1,57 @@
+<div class="min-h-screen bg-cover bg-no-repeat bg-fixed" style="background-image: url('https://www.transparenttextures.com/patterns/waves.png');">
+  <!-- Barre de navigation -->
+  <nav class="bg-white shadow-md fixed w-full top-0 left-0 z-10 py-4">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+      <!-- Logo -->
+      <img src="assets/logo.svg" alt="Logo" class="w-auto h-[13vh]">
+
+      <!-- Bouton "S'inscrire" -->
+      <div class="flex items-center space-x-2">
+        <p class="text-sm text-gray-700">Vous n'avez pas de compte ?</p>
+        <button class="text-white font-semibold py-2 px-6 rounded-lg bg-[#5932EA] hover:bg-[#4625c3] focus:outline-none">
+          S'inscrire
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contenu principal -->
+  <div class="relative min-h-screen pt-20 ">
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="bg-[#EBEBEB] bg-gradient-to-bl bg-opacity-50 backdrop-blur-lg p-8 rounded-lg shadow-lg w-full max-w-md max-h-[80vh] flex flex-col items-center z-10">
+        <h2 class="text-2xl font-bold text-center mb-4">Vous êtes de retour!</h2>
+        
+        <form action="#" method="POST">
+          <!-- Champ Email -->
+          <div class="mb-4">
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <div class="relative">
+              <input type="email" id="email" name="email" class="bg-[#D9D9D9] w-full px-8 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Entrez votre email">
+              <mat-icon class="absolute top-[8px] left-1 text-gray-500">email</mat-icon>
+            </div>
+          </div>
+
+          <!-- Champ Mot de Passe -->
+          <div class="mb-6">
+            <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+            <div class="relative">
+              <input type="password" id="password" name="password" class="bg-[#D9D9D9] w-full px-7 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Entrez votre mot de passe">
+              <mat-icon class="absolute top-[8px] left-1 text-gray-500">lock</mat-icon>
+            </div>
+            <div class="mt-2 text-right">
+              <a href="#" class="text-sm text-[#5932EA] hover:underline">Mot de passe oublié ?</a>
+            </div>
+          </div>
+
+          <!-- Bouton de connexion -->
+          <button type="submit" class="w-full bg-[#5932EA] text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Se connecter</button>
+        </form>
+
+        <p class="mt-4 text-center text-sm text-gray-600">Pas encore de compte ? <a href="#" class="text-sm text-[#5932EA] hover:underline">S'inscrire</a></p>
+      </div>
+    </div>
+
+    <!-- Image de fond en bas -->
+    <div class=" absolute inset-0 bg-cover bg-bottom  bg-no-repeat opacity-40 z-0" style="background-image: url('assets/logg.jpg');  background-blend-mode: overlay;"></div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<aside
+    [class.w-64]="isSidebarOpen"
+    [class.w-16]="!isSidebarOpen"
+    class="bg-white shadow-md flex flex-col transition-all duration-300 relative min-h-screen"
+  >
+    <!-- Bouton pour basculer la sidebar -->
+    <button
+      class="absolute top-1/2 -right-4 transform -translate-y-1/2 bg-gray-800 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md"
+      (click)="toggleSidebar()"
+    >
+      <mat-icon>
+        {{ isSidebarOpen ? 'chevron_left' : 'chevron_right' }}
+      </mat-icon>
+    </button>
+
+    <!-- Contenu de la sidebar -->
+    <div class="p-6 border-b">
+      <div class="flex items-center space-x-4">
+        <img
+        src="assets/dashboard.svg" 
+        alt="User Profile"
+        class="w-10 h-10 rounded-full mb-0"
+      />
+        <h2 class="text-xl font-bold" *ngIf="isSidebarOpen">Dashboard</h2>
+      </div>
+    </div>
+
+    <!-- Icônes visibles lorsque la sidebar est fermée avec espacement responsive entre les icônes -->
+    <div *ngIf="!isSidebarOpen" class="flex flex-col items-center py-6 space-y-4 sm:space-y-6 md:space-y-8 lg:space-y-10">
+      
+      <img
+        src="assets/pic.svg" 
+        alt="User Profile"
+        class="w-10 h-10 rounded-full mb-4"
+      />
+      <div class="bg-[#5932EA] rounded-md flex justify-center w-auto h-10">
+      <img
+        src="assets/User.svg" 
+        alt="User Profile"
+        class="w-10 h-10 rounded-full mb-4 text-[#5932EA] "
+      />
+    </div>
+    
+      <img
+        src="assets/User Add.svg" 
+        alt="User Profile"
+        class="w-10 h-10 rounded-full mb-4 text-[#5932EA] "
+      />
+      
+       
+      <mat-icon class="text-black w-20 h-6">exit_to_app</mat-icon>
+      <!-- Ajoute d'autres icônes si nécessaire -->
+    </div>
+
+    <!-- Contenu de la sidebar lorsque ouverte -->
+    <div *ngIf="isSidebarOpen" class="flex flex-col items-center py-6">
+      <div class="flex  items-center justify-center space-x-4">
+        <img
+        src="https://via.placeholder.com/100"
+        alt="User Profile"
+        class="w-20 h-20 rounded-full border-4 border-gray-300"
+      />
+          <div class="felx flex-col items-center justify-center space-y-0">
+            <p class="mt-4 font-medium text-lg">John Doe</p>
+             <p class="mt-4  text-lg">admin</p>
+          </div>
+        
+      </div>
+      <!-- 3 Buttons-->
+      <div class="flex flex-col mt-20 space-x-2 space-y-5 items-center justify-center">
+        <button
+        class="bg-[#5932EA] text-white px-4 py-2 rounded-md hover:bg-[#4625c3] w-full flex items-center justify-start space-x-12"
+      >
+        <img src="assets/User.svg" alt="profil" class="w-6 h-6"> <!-- Icône à gauche -->
+        <span>Profil</span> <!-- Texte à droite -->
+      </button>
+        <button
+          class="bg-white text-gray-950 px-4 py-2 rounded-md hover:bg-slate-100 w-full flex items-center justify-start space-x-3"
+        >
+         
+        <img src="assets/User Add.svg" alt="profil" class="w-6 h-6"> <!-- Icône à gauche -->
+        <span>Ajouter Utilisateur</span> <!-- Texte à droite -->
+        </button>
+        <button
+          class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 w-full flex items-center justify-start space-x-3"
+        >
+        <mat-icon class="text-white w-20 h-6">exit_to_app</mat-icon>
+           <span>Déconnexion</span>
+        </button>
+      </div>
+    </div>
+        
+      
+   
+  </aside>

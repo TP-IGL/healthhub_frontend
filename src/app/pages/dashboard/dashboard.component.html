@@ -1,0 +1,174 @@
+<div class="flex min-h-screen bg-gray-100  ">
+  <!-- Sidebar -->
+  <app-side-bar (isSidebarOpenR)="toggleSidebar($event)" class="min-h-screen mb-0 fixed top-0 left-0 bottom-0"></app-side-bar>
+
+  <!-- Main Content -->
+  <main  class="flex-1  p-6 space-y-6 transition-all ease-in-out duration-300"
+  [ngClass]="{
+    
+    'ml-20': isSidebarOpen,
+    'ml-[250px]': !isSidebarOpen
+  }">
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-2 shadow-md rounded-lg">
+    
+      <div class="text-lg font-medium flex items-center justify-center space-x-2">
+       
+       <span>Hello, {{ userName }}</span> 
+       <img src="assets/main.png" alt="">
+      </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <div class="bg-white p-6 shadow-md rounded-lg">
+      <!-- Contenu dans une grille unifiée -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+        <!-- Élément 1 -->
+        <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3]  flex items-center justify-center">
+           <img src="assets/profile-2user.svg" alt="">
+          </div>
+          <div>
+            <h3 class="text-lg text-[#ACACAC]">Total utilisateurs</h3>
+            <p class="text-gray-600 font-semibold">200</p>
+          </div>
+        </div>
+    
+        <!-- Élément 2 -->
+        <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3] flex items-center justify-center">
+           <img src="assets/docteur.svg" alt="" >
+          </div>
+          <div>
+            <h3 class="text-lg text-[#ACACAC]">Les Docteurs</h3>
+            <p class="text-gray-600 font-semibold">200</p>
+          </div>
+        </div>
+    
+        <!-- Élément 3 -->
+        <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3] flex items-center justify-center">
+           <img src="assets/radiologue.png" alt="" >
+          </div>
+          <div>
+            <h3 class="text-lg text-[#ACACAC]">Les Radiologues</h3>
+            <p class="text-gray-600 font-semibold">200</p>
+          </div>
+        </div>
+    
+        <!-- Élément 4 -->
+        <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3] flex items-center justify-center">
+           <img src="assets/patient.svg" alt="" >
+          </div>
+          <div>
+            <h3 class="text-lg text-[#ACACAC]">Les Patients</h3>
+            <p class="text-gray-600 font-semibold">200</p>
+          </div>
+        </div>
+
+        <!-- Élément 5-->
+        <div class="flex items-center justify-center  sm:border-b-0  p-4 space-x-5">
+          <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3] flex items-center justify-center">
+           <img src="assets/infermier.svg" alt="" >
+          </div>
+          <div>
+            <h3 class="text-lg text-[#ACACAC]">Les Infermiers</h3>
+            <p class="text-gray-600 font-semibold">200</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Liste des utilisateurs -->
+    <div class="bg-white shadow-md rounded-md p-4 space-y-4">
+      <!-- Header -->
+      <div class="flex flex-col sm:flex-row justify-between items-center">
+        <h3 class="text-xl font-bold">Liste des utilisateurs</h3>
+        <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+          <!-- Recherche -->
+          <div class="relative w-full max-w-md">
+            <mat-icon class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              [(ngModel)]="searchQuery"
+              class="pl-8 w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#5932EA]"
+            />
+          </div>
+          
+          <!-- Tri -->
+          <select
+            [(ngModel)]="sortCriteria" 
+             class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#5932EA]">
+              <option value="">Tous les rôles</option>
+              <option value="medecin">Medecin</option>
+              <option value="radiologue">Radiologue</option>
+              <option value="patient">Patient</option>
+              <option value="infirmier">Infirmier</option>
+             <option value="admin">Admin</option>
+          </select>
+        </div>
+      </div>
+    
+      <!-- Liste des utilisateurs -->
+      <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+        <table class="table-auto w-full border-collapse">
+          <!-- En-tête du tableau -->
+          <thead class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm uppercase tracking-wider">
+            <tr>
+              <th class="px-6 py-3 text-left font-semibold">Nom</th>
+              <th class="px-6 py-3 text-left font-semibold">Prénom</th>
+              <th class="px-6 py-3 text-left font-semibold">Téléphone</th>
+              <th class="px-6 py-3 text-left font-semibold">Email</th> <!-- Nouvelle colonne email -->
+              <th class="px-6 py-3 text-left font-semibold">Rôle</th>
+              <th class="px-6 py-3 text-left font-semibold">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of filteredAndSortedUsers" class="hover:bg-gray-50 transition-all duration-200">
+              <td class="px-6 py-4 border-b border-gray-200">{{ user.nom }}</td>
+              <td class="px-6 py-4 border-b border-gray-200">{{ user.prenom }}</td>
+              <td class="px-6 py-4 border-b border-gray-200">{{ user.telephone }}</td>
+              <td class="px-6 py-4 border-b border-gray-200">{{ user.role }}</td>
+              <td class="px-6 py-4 border-b border-gray-200">{{ user.email }}</td> <!-- Nouvelle cellule email -->
+              
+              <td class="px-6 py-4 border-b border-gray-200">
+                <button class="text-[#DF0404] bg-[#FFC5C5] font-medium border-2 border-red-500 px-4 py-2 rounded-md hover:opacity-50 transition duration-200" (click)="deleteUser(user.id)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      
+    
+      <!-- Footer avec pagination -->
+      <div class="flex justify-between items-center">
+        <button
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          [disabled]="currentPage === 1"
+          (click)="previousPage()"
+        >
+          Précédent
+        </button>
+        <p class="text-gray-600">
+          Page {{ currentPage }} sur {{ totalPages }}
+        </p>
+        <button
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          [disabled]="currentPage === totalPages"
+          (click)="nextPage()"
+        >
+          Suivant
+        </button>
+      </div>
+    </div>
+    
+  </main>
+</div>
+
+
