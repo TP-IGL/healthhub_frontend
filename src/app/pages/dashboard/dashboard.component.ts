@@ -6,16 +6,18 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { FormsModule } from '@angular/forms';
-
+import { MatDialog } from '@angular/material/dialog';
+import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 @Component({
   selector: 'app-dashboard',
-  imports: [MatIconModule,CommonModule,SideBarComponent, FormsModule],
+  imports: [MatIconModule, CommonModule, SideBarComponent, FormsModule, ModaldialogComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
   
   isSidebarOpen :boolean=false;
+  modalDialog: any;
 
   toggleSidebar(isExpanded:boolean) {
     this.isSidebarOpen = !isExpanded;
@@ -28,6 +30,11 @@ export class DashboardComponent {
     { id: 1, nom: 'Doe', prenom: 'John', telephone: '123456789', role: 'Admin',email : 'mciojf'},
     { id: 2, nom: 'Smith', prenom: 'Jane', telephone: '987654321', role: 'Medecin',email : 'mciojf' },
     { id: 3, nom: 'Brown', prenom: 'Lisa', telephone: '456789123', role: 'Patient',email : 'mciojf' },
+    { id:4  , nom: 'Doe', prenom: 'John', telephone: '123456789', role: 'Admin',email : 'mciojf'},
+    { id: 5, nom: 'BAAm', prenom: 'Jane', telephone: '987654321', role: 'Medecin',email : 'mciojf' },
+    { id: 6, nom: 'craft', prenom: 'Lisa', telephone: '456789123', role: 'Patient',email : 'mciojf' },
+    { id: 7, nom: 'omar', prenom: 'Jane', telephone: '987654321', role: 'Medecin',email : 'mciojf' },
+    { id: 8, nom: 'hamid', prenom: 'Lisa', telephone: '456789123', role: 'Patient',email : 'mciojf' },
     // Ajoutez plus de données...
   ];
 
@@ -35,7 +42,7 @@ export class DashboardComponent {
   searchQuery = '';
   sortCriteria = '';
   currentPage = 1;
-  itemsPerPage =20;
+   itemsPerPage =5
 
   // Obtenez les utilisateurs filtrés et triés
   get filteredAndSortedUsers() {
@@ -107,6 +114,17 @@ export class DashboardComponent {
       this.currentPage--;
     }
   }
+  
+
+//to pass it to the modal dialog
+  userIdToDelete: number | null = null;
+  onDeleteUser(userId: number): void {
+    this.userIdToDelete = userId;
+    const modal = document.getElementById('popup-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+    }
+  }
 
   // Supprimer un utilisateur
   deleteUser(id: number) {
@@ -114,6 +132,22 @@ export class DashboardComponent {
   }
 
 
+  onConfirmDelete(isConfirmed: boolean): void {
+    if (isConfirmed && this.userIdToDelete !== null) {
+      this.deleteUser(this.userIdToDelete);
+    }
+    this.userIdToDelete = null; // Reset userIdToDelete after the confirmation
 
+    // Hide modal dialog
+    const modal = document.getElementById('popup-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+    }
+  }
   
-}
+  
+
+
+  }
+
+

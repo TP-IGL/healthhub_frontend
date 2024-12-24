@@ -136,7 +136,7 @@
               <td class="px-4 py-2 border">
                 <button 
                 class="text-[#DF0404] bg-[#FFC5C5] font-medium border-2 border-red-500 px-4 py-2 rounded-md hover:opacity-50 transition duration-200" 
-                  (click)="deleteUser(user.id)">
+                (click)="onDeleteUser(user.id)">
                   Supprimer
                 </button>
               </td>
@@ -158,5 +158,6 @@
           (click)="nextPage()">Suivant</button>
       </div>
     </div>
+    <app-modaldialog (confirmDelete)="onConfirmDelete($event)"></app-modaldialog>
   </main>
 </div>
