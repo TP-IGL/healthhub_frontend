@@ -1,28 +1,33 @@
-<div class="flex min-h-screen bg-gray-100  ">
+<div class="flex flex-col sm:flex-row min-h-screen bg-gray-100 overflow-hidden">
   <!-- Sidebar -->
-  <app-side-bar (isSidebarOpenR)="toggleSidebar($event)" class="min-h-screen mb-0 fixed top-0 left-0 bottom-0"></app-side-bar>
+  <app-side-bar 
+    (isSidebarOpenR)="toggleSidebar($event)" 
+    class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+    [ngClass]="{
+      '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }">
+  </app-side-bar>
 
   <!-- Main Content -->
-  <main  class="flex-1  p-6 space-y-6 transition-all ease-in-out duration-300"
-  [ngClass]="{
+  <main 
+    class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+    [ngClass]="{
+      'ml-0 sm:ml-20': isSidebarOpen,
+      'ml-0 sm:ml-[250px]': !isSidebarOpen
+    }">
     
-    'ml-20': isSidebarOpen,
-    'ml-[250px]': !isSidebarOpen
-  }">
     <!-- Navbar -->
-    <nav class="flex justify-between items-center p-2 shadow-md rounded-lg">
-    
+    <nav class="flex flex-wrap justify-between items-center p-2 shadow-md rounded-lg">
       <div class="text-lg font-medium flex items-center justify-center space-x-2">
-       
-       <span>Hello, {{ userName }}</span> 
-       <img src="assets/main.png" alt="">
+        <span>Hello, {{ userName }}</span>
+        <img src="assets/main.png" alt="User Icon" class="w-8 h-8">
       </div>
     </nav>
 
     <!-- Contenu principal -->
-    <div class="bg-white p-6 shadow-md rounded-lg">
-      <!-- Contenu dans une grille unifiée -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5">
+    <div class="bg-white p-4 sm:p-6 shadow-md rounded-lg">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <!-- Élément 1 -->
         <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
           <div class="w-12 h-12 rounded-full mb-4 bg-[#D9CDF3]  flex items-center justify-center">
@@ -33,6 +38,7 @@
             <p class="text-gray-600 font-semibold">200</p>
           </div>
         </div>
+        
     
         <!-- Élément 2 -->
         <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
@@ -83,27 +89,23 @@
 
     <!-- Liste des utilisateurs -->
     <div class="bg-white shadow-md rounded-md p-4 space-y-4">
-      <!-- Header -->
-      <div class="flex flex-col sm:flex-row justify-between items-center">
+      <div class="flex flex-wrap sm:flex-nowrap justify-between items-center space-y-2 sm:space-y-0">
         <h3 class="text-xl font-bold">Liste des utilisateurs</h3>
-        <div class="flex items-center space-x-4 mt-2 sm:mt-0">
-          <!-- Recherche -->
+        <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
           <div class="relative w-full max-w-md">
-            <mat-icon class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
             <input
               type="text"
               placeholder="Rechercher..."
               [(ngModel)]="searchQuery"
-              class="pl-8 w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#5932EA]"
+              class="pl-8 w-full border rounded-md py-2 focus:ring-2 focus:ring-[#5932EA]"
             />
+            <mat-icon class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400">search</mat-icon>
           </div>
-          
-          <!-- Tri -->
-          <select
+          <select 
             [(ngModel)]="sortCriteria" 
-             class="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#5932EA]">
-              <option value="">Tous les rôles</option>
-              <option value="medecin">Medecin</option>
+            class="border rounded-md py-2 focus:ring-2 focus:ring-[#5932EA]">
+            <option value="">Tous les rôles</option>
+            <option value="medecin">Medecin</option>
               <option value="radiologue">Radiologue</option>
               <option value="patient">Patient</option>
               <option value="infirmier">Infirmier</option>
@@ -111,31 +113,30 @@
           </select>
         </div>
       </div>
-    
-      <!-- Liste des utilisateurs -->
-      <div class="overflow-x-auto bg-white shadow-lg rounded-lg">
+
+      <div class="overflow-x-auto">
         <table class="table-auto w-full border-collapse">
-          <!-- En-tête du tableau -->
           <thead class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm uppercase tracking-wider">
             <tr>
-              <th class="px-6 py-3 text-left font-semibold">Nom</th>
-              <th class="px-6 py-3 text-left font-semibold">Prénom</th>
-              <th class="px-6 py-3 text-left font-semibold">Téléphone</th>
-              <th class="px-6 py-3 text-left font-semibold">Email</th> <!-- Nouvelle colonne email -->
-              <th class="px-6 py-3 text-left font-semibold">Rôle</th>
-              <th class="px-6 py-3 text-left font-semibold">Actions</th>
+              <th class="px-4 py-2 text-left">Nom</th>
+              <th class="px-4 py-2 text-left">Prénom</th>
+              <th class="px-4 py-2 text-left">Téléphone</th>
+              <th class="px-4 py-2 text-left">Email</th>
+              <th class="px-4 py-2 text-left">Rôle</th>
+              <th class="px-4 py-2 text-left">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let user of filteredAndSortedUsers" class="hover:bg-gray-50 transition-all duration-200">
-              <td class="px-6 py-4 border-b border-gray-200">{{ user.nom }}</td>
-              <td class="px-6 py-4 border-b border-gray-200">{{ user.prenom }}</td>
-              <td class="px-6 py-4 border-b border-gray-200">{{ user.telephone }}</td>
-              <td class="px-6 py-4 border-b border-gray-200">{{ user.role }}</td>
-              <td class="px-6 py-4 border-b border-gray-200">{{ user.email }}</td> <!-- Nouvelle cellule email -->
-              
-              <td class="px-6 py-4 border-b border-gray-200">
-                <button class="text-[#DF0404] bg-[#FFC5C5] font-medium border-2 border-red-500 px-4 py-2 rounded-md hover:opacity-50 transition duration-200" (click)="deleteUser(user.id)">
+              <td class="px-4 py-2 border">{{ user.nom }}</td>
+              <td class="px-4 py-2 border">{{ user.prenom }}</td>
+              <td class="px-4 py-2 border">{{ user.telephone }}</td>
+              <td class="px-4 py-2 border">{{ user.email }}</td>
+              <td class="px-4 py-2 border">{{ user.role }}</td>
+              <td class="px-4 py-2 border">
+                <button 
+                class="text-[#DF0404] bg-[#FFC5C5] font-medium border-2 border-red-500 px-4 py-2 rounded-md hover:opacity-50 transition duration-200" 
+                  (click)="deleteUser(user.id)">
                   Supprimer
                 </button>
               </td>
@@ -143,32 +144,19 @@
           </tbody>
         </table>
       </div>
-      
-      
-    
-      <!-- Footer avec pagination -->
-      <div class="flex justify-between items-center">
+
+      <!-- Pagination -->
+      <div class="flex flex-wrap justify-between items-center">
         <button
-          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
           [disabled]="currentPage === 1"
-          (click)="previousPage()"
-        >
-          Précédent
-        </button>
-        <p class="text-gray-600">
-          Page {{ currentPage }} sur {{ totalPages }}
-        </p>
+          (click)="previousPage()">Précédent</button>
+        <p class="text-gray-600">Page {{ currentPage }} sur {{ totalPages }}</p>
         <button
-          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
           [disabled]="currentPage === totalPages"
-          (click)="nextPage()"
-        >
-          Suivant
-        </button>
+          (click)="nextPage()">Suivant</button>
       </div>
     </div>
-    
   </main>
 </div>
-
-

@@ -112,4 +112,8 @@ export class DashboardComponent {
   deleteUser(id: number) {
     this.users = this.users.filter((user) => user.id !== id);
   }
+
+
+
+  
 }
