@@ -1,0 +1,50 @@
+<div class="min-h-screen flex w-full ">
+    <!-- Sidebar -->
+      <!-- Sidebar -->
+  <app-side-bar 
+  (isSidebarOpenR)="toggleSidebar($event)" 
+  class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+  [ngClass]="{
+    '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+    'translate-x-0': isSidebarOpen
+  }">
+</app-side-bar>
+    
+    <!-- Content Area -->
+    <div class="min-h-screen w-full bg-slate-100 py-10 px-6 sm:px-12 lg:px-20 flex-col "     [ngClass]="{
+      'ml-0 max-sm:pl-20 ': isSidebarOpen,
+      'ml-0 sm:ml-[250px]': !isSidebarOpen
+    }">
+        <div class="font-bold flex space-x-2 items-center">
+          <div><img src="/assets/main.png"/></div>
+          <div> Hello Nazim</div>
+        </div>
+        <div class="bg-white p-4 rounded-lg my-6">
+          <!-- Stats -->
+          <div class="grid  lg:grid-cols-3 max-lg:grid-cols-2 max-sm:grid-cols-1 xl:grid-cols-5">
+              <div class="flex space-x-2 items-center">
+                <div>
+                  <img src="/assets/2user.svg" class="w-12 h-12 rounded-full p-2 bg-[#D9CDF3]" />
+                </div>
+                <div class="flex-col items-center">
+                  <div class="text-[#ACACAC]">Total </div>
+                  <div class="flex items-center space-x-2">
+                      <div class="text-black">1000</div>
+                      <div class="text-[#7F56D9]">+{{num}}%</div>
+                  </div>
+                </div>
+              </div>
+              <app-stats-card
+                *ngFor="let job of jobs"
+                [title]="job.job"
+                [number]="job.number"
+                [image]="job.image">
+              </app-stats-card>
+            </div>
+        </div>
+        <!--Form-->
+        <app-user-form/>
+      </div>
+    </div>
+  
+  

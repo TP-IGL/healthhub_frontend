@@ -5,7 +5,7 @@ import { HospitalComponent } from './pages/hospital/hospital.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { StatsComponent } from './pages/stats/stats.component';
 import { LoginComponent } from './pages/login/login.component';
-import { AddPersonComponent } from './pages/add-person/add-person.component';
+import { AddUserComponent } from './pages/add-user/add-user.component';
 
 export const routes: Routes = [
   {
@@ -30,7 +30,7 @@ export const routes: Routes = [
     ]
   },
   {
-    path : 'addPerson' , component : AddPersonComponent
+    path : 'addPerson' , component : AddUserComponent
   }
   
 ];
