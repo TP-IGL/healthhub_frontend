@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 
 @Component({
   selector: 'app-modaldialog',
@@ -8,7 +8,7 @@ import { Component, EventEmitter, Output } from '@angular/core'
 })
 export class ModaldialogComponent {
 
-
+  @Input() modalMessage: string ="";
   @Output() confirmDelete = new EventEmitter<boolean>();
 
   // Method to show the modal (using the id of the modal)

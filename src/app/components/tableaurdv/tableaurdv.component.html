@@ -1,0 +1,52 @@
+<div   class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          <input id="checkbox-all" type="checkbox" (change)="toggleAllSelection($event)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+        </th>
+        <th scope="col" class="px-6 py-3">Nom</th>
+        <th scope="col" class="px-6 py-3">Statut</th>
+        <th scope="col" class="px-6 py-3">Date et Heure</th>
+        <th scope="col" class="px-6 py-3">Motif de Consultation</th>
+        <th scope="col" class="px-6 py-3">Numéro de Téléphone</th>
+        <th scope="col" class="px-6 py-3">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of paginatedAppointments(); let i = index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        <td class="px-6 py-4">
+          <input id="checkbox-{{appointment.name}}" type="checkbox" [(ngModel)]="appointment.selected" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600">
+        </td>
+        <td class="px-6 py-4">{{ appointment.name }}</td>
+        <td class="px-6 py-4">
+          <div class="flex items-center">
+            <div [ngClass]="{'bg-green-500': appointment.statut === 'confirmé', 'bg-red-500': appointment.statut === 'annulé', 'bg-[#D7901E]': appointment.statut === 'En attente'}" class="h-2.5 w-2.5 rounded-full me-2"></div> 
+            {{ appointment.statut }}
+          </div>
+        </td>
+        <td class="px-6 py-4">{{ appointment.date }} à {{ appointment.heure }}</td>
+        <td class="px-6 py-4">{{ appointment.motif }}</td>
+        <td class="px-6 py-4">{{ appointment.phone }}</td>
+        <td class="px-6 py-4 flex gap-2">
+          <button  (click)="openModal('Confirmer la suppression de ce rendez-vous ?', false, i)"><img src="assets/delete.svg" alt=""></button>
+          <button (click)="modifyAppointment(appointment)"><img src="assets/edit.svg" alt=""></button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Pagination -->
+  <div class="pagination flex justify-between items-center">
+    <button (click)="previousPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Précédent</button>
+    <span class="px-4 py-2">Page {{ currentPage }} / {{ totalPages() }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Suivant</button>
+  </div>
+  <div class="mt-4 flex justify-center items-center">
+    <button (click)="openModal('Confirmer la suppression des rendez-vous sélectionnés ?', true)" class="px-4 py-2 bg-[#714FED] text-white rounded" [disabled]="!hasSelectedAppointments()">Supprimer les rendez-vous sélectionnés</button>
+  </div>
+  <app-modaldialog
+    [modalMessage]="modalMessage"
+    (confirmDelete)="confirmDelete($event)"
+  ></app-modaldialog>
+</div>

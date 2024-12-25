@@ -115,7 +115,8 @@ export class DashboardComponent {
     }
   }
   
-
+/******************************************************************POP-UP************************* */
+modalMessage: string = 'Etes vous sur de la suppression de cet utilisateur'
 //to pass it to the modal dialog
   userIdToDelete: number | null = null;
   onDeleteUser(userId: number): void {

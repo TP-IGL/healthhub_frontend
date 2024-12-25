@@ -1,0 +1,139 @@
+<div class="flex flex-col sm:flex-row min-h-screen bg-gray-100 overflow-hidden">
+  <!-- Sidebar -->
+   <app-side-bar 
+    (isSidebarOpenR)="toggleSidebar($event)" 
+    class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+    [ngClass]="{
+      '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }">
+   </app-side-bar>
+
+  <!-- Main Content -->
+<main 
+   class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+   [ngClass]="{
+     'ml-0 sm:ml-20': isSidebarOpen,
+     'ml-0 sm:ml-[250px]': !isSidebarOpen
+   }">
+         <nav class="flex flex-wrap justify-between items-center p-2 rounded-lg ">
+          <div class="text-lg font-medium flex items-center justify-center space-x-2">
+            <span>Bienvenue Dr.Hakim</span>
+            <img src="assets/main.png" alt="User Icon" class="w-8 h-8">
+          </div>
+        </nav>
+  <!-- Contenu principal -->
+  <div class="bg-white p-4 sm:p-6 rounded-lg">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Élément 1 -->
+       <div 
+         class="w-full h-[223px] bg-cover bg-center rounded-lg shadow-lg transition-transform transform hover:scale-105"
+         style="background-image: url('assets/totalrdvmauve.svg');">
+         <div class="flex flex-col justify-end h-full bg-opacity-30 p-4 text-white ">
+           <h3 class="text-lg ">Total rendez-vous</h3>
+           <p class="text-3xl font-bold">1053</p>
+          </div>
+       </div>
+       <!-- Élément 2 -->
+       <div 
+         class="w-full h-[223px] bg-cover bg-center rounded-lg shadow-lg transition-transform transform hover:scale-105"
+         style="background-image: url('assets/rdvaujvert.svg');">
+          <div class="flex flex-col justify-end h-full bg-opacity-30 p-4 text-white">
+           <h3 class="text-xl ">Rendez-vous aujourd'hui</h3>
+           <p class="text-3xl font-bold">83</p>
+          </div>
+       </div>
+     <!-- Élément 3 -->
+      <div 
+        class="w-full h-[223px] bg-cover bg-center rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        style="background-image: url('assets/rdvtotaljaune.svg');">
+        <div class="flex flex-col justify-end h-full bg-opacity-30 p-4 text-white ">
+          <h3 class="text-lg ">Total rendez-vous</h3>
+          <p class="text-3xl font-bold">25</p>
+        </div>
+      </div>
+       
+    </div>
+  </div>
+  
+
+  <!--Gestion des rendez-vous-->
+  <div class="flex items-center justify-between bg-white p-4 sm:p-6 rounded-lg ">
+   
+    <h2 class="text-2xl font-bold text-[#000000]">Gestion des rendez-vous</h2>
+    <button   (click)="openAddRdvModal()"
+      class="flex items-center gap-2 px-4 py-2 bg-[#714FED] text-white font-semibold rounded-lg shadow-md hover:opacity-90 transition">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      Ajouter un  Rendez-vous
+    </button>
+  </div>
+
+  <app-add-rdv 
+  [isModalOpen]="isModalOpen" 
+  (closeModalEvent)="closeAddRdvModal($event)" 
+  (addRdvEvent)="addRdv($event)">
+</app-add-rdv>
+  <div class="flex items-center justify-between bg-white p-4 sm:p-6 rounded-lg ">
+    <h2 class="text-2xl font-bold text-[#000000]">Rendez-vous récents   <span class=" p-4 text-xs text-[#714FED]"> 80 participants</span></h2>
+     
+  </div>
+  <app-tableaurdv 
+  [tableau]="tableau" 
+  (modifyEvent)="modifyAppointment($event)" 
+  (deleteEvent)="deleteAppointment($event)">
+</app-tableaurdv>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   </main>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>

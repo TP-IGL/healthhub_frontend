@@ -158,6 +158,6 @@
           (click)="nextPage()">Suivant</button>
       </div>
     </div>
-    <app-modaldialog (confirmDelete)="onConfirmDelete($event)"></app-modaldialog>
+    <app-modaldialog (confirmDelete)="onConfirmDelete($event)"  [modalMessage]="modalMessage"></app-modaldialog>
   </main>
 </div>

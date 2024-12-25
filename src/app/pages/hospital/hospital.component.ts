@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './hospital.component.css'
 })
 export class HospitalComponent {
+  
 
 }

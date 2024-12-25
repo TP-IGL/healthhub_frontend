@@ -6,6 +6,9 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { StatsComponent } from './pages/stats/stats.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AddUserComponent } from './pages/add-user/add-user.component';
+import { MedecinComponent } from './pages/medecin/medecin.component';
+import { RendezvousComponent } from './pages/rendezvous/rendezvous.component';
+import { AddRdvComponent } from './components/add-rdv/add-rdv.component';
 
 export const routes: Routes = [
   {
@@ -31,7 +34,22 @@ export const routes: Routes = [
   },
   {
     path : 'addPerson' , component : AddUserComponent
-  }
+  },
+
+
+
+  {
+    path : 'medecin' , component : MedecinComponent ,
+  },
+    
+     {
+        path: 'medecin/rendezvous', component: RendezvousComponent
+      },
+      {
+        path: 'medecin/rendezvous/addRdv', component: AddRdvComponent
+      },
+     
+   
   
 ];
 
