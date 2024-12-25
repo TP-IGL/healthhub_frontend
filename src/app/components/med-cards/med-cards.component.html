@@ -1,0 +1,68 @@
+<div 
+  [class]="!isSidebarOpen ? 'grid sm:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3' : 'grid sm:grid-cols-1 lg:grid-cols-3  xl:grid-cols-3'"
+  class=" gap-2 max-lg:mx-auto "
+>
+  <div class="bg-[#5936DB] text-white rounded-lg py-3 px-4 flex-col w-full max-w-sm max-lg:mx-auto">
+    <div class="flex items-center space-x-1">
+      <div>
+        <img src="/assets/increase.png" class="h-10 w-60" alt="Graph Icon" />
+      </div>
+      <div>
+        <div class="font-medium text-xl text-nowrap">Nombre de patients</div>
+      </div>
+      <div class="relative left-4">
+        <img src="/assets/vector.png" class="h-[5rem] w-[30rem]" />
+      </div>
+    </div>
+    <div class="flex space-x-8 items-center">
+      <div class="text-3xl font-bold">1280</div>
+      <div class="bg-opacity-50 bg-slate-200 p-3 rounded-3xl font-medium">+15.2%</div>
+    </div>
+    <div class="text-white font-medium mt-2">
+      <p>Le nombre de dossiers patients actifs est passe de 615 a 752</p>
+    </div>
+  </div>
+
+  <div class="bg-white text-black rounded-lg py-3 px-4 flex-col w-full max-w-sm max-lg:mx-auto">
+    <div class="flex items-center space-x-2">
+      <div>
+        <img src="/assets/rendezvous.png" alt="Graph Icon" />
+      </div>
+      <div>
+        <div class="font-medium w-full text-[#3F3E3E]">Nombre de rendez-vous à venir</div>
+      </div>
+    </div>
+    <div class="flex space-x-8 items-center mt-4">
+      <div class="text-4xl font-bold">83</div>
+      <div class="bg-opacity-50 bg-slate-200 text-[#614BB6] p-3 rounded-3xl font-medium">+15.2%</div>
+    </div>
+    <div class="font-medium mt-4 flex items-center space-x-6">
+      <div>
+        <img src="/assets/graphs.png" />
+      </div>
+      <div class="w-5/6 text-[10px] font-medium text-[#3C3C3C]">
+        <p>Augmentation de 50 patients hospitalisés au cours des 7 derniers jours.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white text-black rounded-lg py-3 px-4 flex-col w-full max-w-sm max-lg:mx-auto">
+    <div class="flex items-center space-x-2">
+      <div>
+        <img src="/assets/pen.png" alt="Graph Icon" />
+      </div>
+      <div>
+        <div class="font-medium w-full text-[#3F3E3E]">Nombre d’ordonnances prescrites</div>
+      </div>
+    </div>
+    <div class="flex space-x-8 items-center mt-4">
+      <div class="text-4xl font-bold">83</div>
+      <div class="bg-opacity-50 bg-slate-200 text-[#614BB6] p-3 rounded-3xl font-medium">+15.2%</div>
+    </div>
+    <div class="font-medium mt-4 flex items-center space-x-6">
+      <div class="w-full font-medium text-[#3C3C3C]">
+        <p>Augmentation du 8 ordonnances rédigées au cours des 7 derniers jours.</p>
+      </div>
+    </div>
+  </div>
+</div>

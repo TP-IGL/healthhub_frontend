@@ -1,0 +1,153 @@
+<!-- Main modal -->
+<div *ngIf="isModalOpen" class="z-50 fixed inset-0 max-sm:pt-[200px] flex justify-center items-center bg-gray-900 bg-opacity-50 overflow-y-scroll max-sm:pb-2  max-sm:px-10 ">
+    <!-- Modal Content -->
+    <div class="bg-white p-6 rounded-lg w-full max-w-lg ">
+      <div class="flex justify-between items-center mb-4">
+        <div class="flex items-center space-x-1">
+          <div>
+            <img src="/assets/icon.png" alt="Icon" />
+          </div>
+          <div class="flex-col items-center space-y-1">
+            <div class="text-[#181D27]">Ajouter un patient</div>
+            <div class="text-[#535862]">Créez le profil de votre patient en quelques clics.</div>
+          </div>
+        </div>
+  
+        <!-- Close Button -->
+        <button (click)="toggleModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <hr class="w-full text-[#BBBBBB] py-2" />
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Full Name -->
+          <div>
+            <label for="fullname" class="block text-sm font-medium text-gray-700">Nom complet*</label>
+            <input
+              id="fullname"
+              formControlName="fullname"
+              type="text"
+              placeholder="Entrez votre nom complet"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+            <small *ngIf="userForm.get('fullname')?.invalid && userForm.get('fullname')?.touched" class="text-red-500 text-xs">
+              <span *ngIf="userForm.get('fullname')?.errors?.['required']">Nom complet est requis.</span>
+              <span *ngIf="userForm.get('fullname')?.errors?.['minlength']">Minimum 3 caractères requis.</span>
+            </small>
+          </div>
+  
+          <!-- NSS -->
+          <div>
+            <label for="nss" class="block text-sm font-medium text-gray-700">Numéro de sécurité sociale (NSS)</label>
+            <input
+              id="nss"
+              formControlName="nss"
+              type="text"
+              placeholder="Entrez votre NSS"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+            <small *ngIf="userForm.get('nss')?.invalid && userForm.get('nss')?.touched" class="text-red-500 text-xs">
+              NSS est requis et doit être un numéro à 15 chiffres.
+            </small>
+          </div>
+  
+          <!-- Telephone -->
+          <div>
+            <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+            <input
+              id="telephone"
+              formControlName="telephone"
+              type="text"
+              placeholder="Entrez votre numéro de téléphone"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+  
+          <!-- Date de dernière visite -->
+          <div>
+            <label for="dod" class="block text-sm font-medium text-gray-700">Date de dernière visite*</label>
+            <input
+              id="dod"
+              formControlName="lastVisitDate"
+              type="date"
+              placeholder="Sélectionnez votre Date de dernière visite"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+            <small *ngIf="userForm.get('lastVisitDate')?.invalid && userForm.get('lastVisitDate')?.touched" class="text-red-500 text-xs">
+              Date de dernière visite est requise.
+            </small>
+          </div>
+  
+          <!-- Date de prochain rendez-vous -->
+          <div>
+            <label for="dob" class="block text-sm font-medium text-gray-700">Prochain rendez-vous*</label>
+            <input
+              id="dob"
+              formControlName="nextAppointmentDate"
+              type="date"
+              placeholder="Sélectionnez votre Prochain rendez-vous"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+            <small *ngIf="userForm.get('nextAppointmentDate')?.invalid && userForm.get('nextAppointmentDate')?.touched" class="text-red-500 text-xs">
+              Date de prochain rendez-vous est requise.
+            </small>
+          </div>
+  
+          <!-- Status -->
+          <div>
+            <label for="state" class="block text-sm font-medium text-gray-700">Status</label>
+            <select
+              id="state"
+              formControlName="status"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-[#5932EA] focus:border-[#5932EA] hover:bg-slate-300 cursor-pointer hover:text-white"
+            >
+              <option value="">Sélectionnez un status</option>
+              <option *ngFor="let state of statuses" [value]="state">{{ state }}</option>
+            </select>
+            <small *ngIf="userForm.get('status')?.invalid && userForm.get('status')?.touched" class="text-red-500 text-xs">
+              Status est requis.
+            </small>
+          </div>
+        </div>
+        <hr class="w-full text-[#BBBBBB] my-4" />
+  
+        <!-- Profile Image -->
+        <div>
+          <label for="profileImage" class="block text-sm font-medium text-gray-700">Image du profil</label>
+          <input
+            id="profileImage"
+            formControlName="profileImage"
+            type="file"
+            accept="image/*"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('profileImage')?.invalid && userForm.get('profileImage')?.touched" class="text-red-500 text-xs">
+            L'image du profil est requise.
+          </small>
+        </div>
+  
+        <!-- Buttons -->
+        <div class="flex justify-between mt-6">
+          <button
+            type="button"
+            (click)="onReset(); toggleModal()"
+            class="px-6 py-2 bg-white border-2 border-gray-400 rounded-md"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            (click)="toggleModal()"
+            [disabled]="!userForm.valid"
+            class="px-6 py-2 bg-[#5932EA] cursor-pointer text-white rounded-md hover:bg-[#3f22b5]"
+          >
+            Ajouter
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

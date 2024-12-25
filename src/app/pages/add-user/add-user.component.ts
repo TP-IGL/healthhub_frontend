@@ -21,7 +21,6 @@ export class AddUserComponent {
   ];
 
   isSidebarOpen :boolean=false;
-  modalDialog: any;
 
   toggleSidebar(isExpanded:boolean) {
     this.isSidebarOpen = !isExpanded;

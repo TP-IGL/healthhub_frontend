@@ -1,0 +1,64 @@
+<div class="relative overflow-x-auto sm:rounded-lg bg-white p-2 ">
+    <div class="px-4 py-3 flex items-center space-x-1">
+      <div>
+        <div class="font-bold text-xl">Patients</div>
+      </div>
+      <div class="text-[#6941C6] bg-[#E9EAEB] p-2 rounded-3xl w-fit font-medium">
+        {{ users.length }} users
+      </div>
+    </div>
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">Name</th>
+          <th scope="col" class="px-6 py-3 flex items-center space-x-2 cursor-pointer" (click)="sortByStatus()">
+            <span>Status</span>
+            <svg class="w-4 h-4" [ngClass]="{ 'rotate-180': isAscending }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+            </svg>
+          </th>
+          <th scope="col" class="px-6 py-3">Last Visit</th>
+          <th scope="col" class="px-6 py-3">Phone</th>
+          <th scope="col" class="px-6 py-3">Next Appointment</th>
+          <th scope="col" class="px-6 py-3">Edit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of getUser()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            <img [src]="user.photo" alt="User photo" class="inline w-8 h-8 rounded-full mr-2" />
+            {{ user.name }}
+          </th>
+          <td class="px-6 py-4 flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full" [ngStyle]="{ 'background-color': user.Status === 'Active' ? '#17B26A' : user.Status === 'En consultation' ? '#1E36D7' : '#6A8779' }"></span>
+            <span>{{ user.Status }}</span>
+          </td>
+          <td class="px-6 py-4">{{ formatDate(user.lastVisit) }}</td>
+          <td class="px-6 py-4">{{ user.phone }}</td>
+          <td class="px-6 py-4">{{ formatDate(user.nextAppointment) }}</td>
+          <td class="px-6 py-4 text-center items-center">
+            <div class="flex items-center space-x-1">
+              <div  class="cursor-pointer"><img src="/assets/edit.png" width="40px" height="12px" /></div>
+              <div class="cursor-pointer"><img src="/assets/remove.png"  width="40px" height="12px" /></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Pagination -->
+    <div class="flex flex-wrap justify-between items-center pt-2 w-full">
+      <button
+        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
+        [disabled]="currentPage === 1"
+        [ngClass]="currentPage == 1 ? 'cursor-not-allowed' : 'cursor-pointer'"
+        (click)="previousPage()">Précédent</button>
+      <p class="text-gray-600">Page {{ currentPage }} sur {{ totalPages }}</p>
+      <button
+        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md"
+        [disabled]="currentPage === totalPages"
+        [ngClass]="currentPage == totalPages ? 'cursor-not-allowed' : 'cursor-pointer'"
+        (click)="nextPage()">Suivant</button>
+    </div>
+  </div>
+  
