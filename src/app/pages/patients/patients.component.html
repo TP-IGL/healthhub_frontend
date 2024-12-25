@@ -3,7 +3,7 @@
       <!-- Sidebar -->
   <app-side-bar 
   (isSidebarOpenR)="toggleSidebar($event)" 
-  class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+  class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300 z-50"
   [ngClass]="{
     '-translate-x-full sm:translate-x-0': !isSidebarOpen,
     'translate-x-0': isSidebarOpen
@@ -12,7 +12,7 @@
     
     <!-- Content Area -->
     <div class="min-h-screen w-full bg-slate-100 py-10 px-6 sm:px-12 lg:px-20 flex-col "     [ngClass]="{
-      'max-sm:pl-20 sm:pl-40  ': isSidebarOpen,
+      'max-sm:pl-20 sm:pl-40 overflow-hidden ': isSidebarOpen,
       'ml-0 sm:ml-[250px]  ': !isSidebarOpen
     }">
     <div class="flex-col items-center space-y-2 justify-center">
@@ -31,7 +31,7 @@
         <div class="flex justify-between pt-8 items-center">
             <div class="font-semibold text-xl">Gestion des Patients</div>
             <div>
-                <button class="bg-[#714FED] rounded-lg p-2 text-white font-bold hover:bg-[#8d70f8] cursor-pointer">+ Ajouter un Patient</button>
+                <button class="bg-[#714FED] rounded-lg p-2 text-white font-bold hover:bg-[#8d70f8] cursor-pointer" (click)="toggleModal()">+ Ajouter un Patient</button>
             </div>
         </div>
         <div class="pt-4">
@@ -39,6 +39,8 @@
         </div>
         
     </div>
-
+    <div *ngIf="isModalOpen">
+        <app-add-patient-modal [isModalOpen]="isModalOpen"/>
+    </div>
     </div>
 </div>

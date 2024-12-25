@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
-import { NgxPaginationModule } from 'ngx-pagination'; 
+import { NgxPaginationModule } from 'ngx-pagination';
+
 
 @Component({
   selector: 'app-patients-table',
@@ -103,4 +104,5 @@ export class PatientsTableComponent {
       this.currentPage--;
     }
   }
+
 }
