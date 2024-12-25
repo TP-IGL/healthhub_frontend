@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
-import { NgxPaginationModule } from 'ngx-pagination';
+
 
 
 @Component({
   selector: 'app-patients-table',
-  imports: [CommonModule, NgxPaginationModule],
+  imports: [CommonModule],
   templateUrl: './patients-table.component.html',
   styleUrls: ['./patients-table.component.css'],
   providers: [DatePipe]

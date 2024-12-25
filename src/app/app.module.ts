@@ -3,7 +3,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 
