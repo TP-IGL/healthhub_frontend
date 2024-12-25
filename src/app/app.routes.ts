@@ -45,9 +45,7 @@ export const routes: Routes = [
      {
         path: 'medecin/rendezvous', component: RendezvousComponent
       },
-      {
-        path: 'medecin/rendezvous/addRdv', component: AddRdvComponent
-      },
+     
      
    
   
