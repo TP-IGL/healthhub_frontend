@@ -6,6 +6,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { StatsComponent } from './pages/stats/stats.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AddUserComponent } from './pages/add-user/add-user.component';
+import { PatientsComponent } from './pages/patients/patients.component';
 
 export const routes: Routes = [
   {
@@ -30,8 +31,11 @@ export const routes: Routes = [
     ]
   },
   {
-    path : 'addPerson' , component : AddUserComponent
-  }
+    path : 'addPerson' , component : AddUserComponent ,
+  },
+  {
+    path : "medcin/:id/patients" , component : PatientsComponent , 
+  },
   
 ];
 
