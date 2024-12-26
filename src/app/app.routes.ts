@@ -10,6 +10,8 @@ import { MedecinComponent } from './pages/medecin/medecin.component';
 import { RendezvousComponent } from './pages/rendezvous/rendezvous.component';
 
 import { PatientsComponent } from './pages/patients/patients.component';
+import { OrdonnancesComponent } from './pages/ordonnances/ordonnances.component';
+import { RapportsComponent } from './pages/rapports/rapports.component';
 
 export const routes: Routes = [
   {
@@ -56,7 +58,12 @@ export const routes: Routes = [
   {
     path : "medecin/:id/patients" , component : PatientsComponent , 
   },
-
+  {
+    path: 'medecin/ordonnances', component: OrdonnancesComponent
+  },
+  {
+    path: 'medecin/rapports', component: RapportsComponent
+  },
   
 ];
 

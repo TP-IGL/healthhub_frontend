@@ -1,14 +1,18 @@
 <div class="min-h-screen flex w-full ">
     <!-- Sidebar -->
       <!-- Sidebar -->
-  <app-side-bar 
-  (isSidebarOpenR)="toggleSidebar($event)" 
-  class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300 z-50"
-  [ngClass]="{
-    '-translate-x-full sm:translate-x-0': !isSidebarOpen,
-    'translate-x-0': isSidebarOpen
-  }">
-</app-side-bar>
+      <app-side-bar-medecin 
+      [activeItem]="activeItem"
+      (isSidebarOpenR)="toggleSidebar($event)" 
+      (menuSelected)="onMenuSelect($event)"
+     class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+     [ngClass]="{
+       '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+       'translate-x-0': isSidebarOpen
+     }">
+  
+  
+     </app-side-bar-medecin>
     
     <!-- Content Area -->
     <div class="min-h-screen w-full bg-slate-100 py-10 px-6 sm:px-12 lg:px-20 flex-col "     [ngClass]="{

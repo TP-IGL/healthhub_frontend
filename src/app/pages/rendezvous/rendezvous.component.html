@@ -1,13 +1,18 @@
 <div class="flex flex-col sm:flex-row min-h-screen bg-gray-100 overflow-hidden">
   <!-- Sidebar -->
-   <app-side-bar 
+   <app-side-bar-medecin 
+   [activeItem]="activeItem"
     (isSidebarOpenR)="toggleSidebar($event)" 
-    class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
-    [ngClass]="{
-      '-translate-x-full sm:translate-x-0': !isSidebarOpen,
-      'translate-x-0': isSidebarOpen
-    }">
-   </app-side-bar>
+    (menuSelected)="onMenuSelect($event)"
+   class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+   [ngClass]="{
+     '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+     'translate-x-0': isSidebarOpen
+   }">
+
+
+   </app-side-bar-medecin>
+  
 
   <!-- Main Content -->
 <main 
@@ -85,55 +90,6 @@
   (deleteEvent)="deleteAppointment($event)">
 </app-tableaurdv>
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    </main>
-
-
-
-
-
-
-
-
-
-
-
-
 
 </div>

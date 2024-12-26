@@ -5,19 +5,16 @@ import { CommonModule } from '@angular/common'
 import { Rendezvous, TableaurdvComponent } from '../../components/tableaurdv/tableaurdv.component'
 import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 import { AddRdvComponent } from "../../components/add-rdv/add-rdv.component";
+import { Router } from '@angular/router';
+import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-bar-medecin.component';
 @Component({
   selector: 'app-rendezvous',
-  imports: [SideBarComponent, CommonModule, TableaurdvComponent, ModaldialogComponent, AddRdvComponent],
+  imports: [SideBarComponent, CommonModule, TableaurdvComponent, ModaldialogComponent, AddRdvComponent, SideBarMedecinComponent],
   templateUrl: './rendezvous.component.html',
   styleUrl: './rendezvous.component.css'
 })
 export class RendezvousComponent {
-  isSidebarOpen :boolean=false;
- 
-
-  toggleSidebar(isExpanded:boolean) {
-    this.isSidebarOpen = !isExpanded;
-  }
+  
 
   /******************************************************************************************** */
     tableau: Rendezvous[] = [
@@ -112,4 +109,49 @@ export class RendezvousComponent {
     this.tableau.push(appointment);  // Ajoute le rendez-vous à la liste
     console.log('Rendez-vous ajouté:', appointment);
   }
+
+ 
+  /****************************************SIDEBARRRRRRRRRRRRRRR****************************** */
+  isSidebarOpen :boolean=false;
+  
+
+  toggleSidebar(isExpanded:boolean) {
+    this.isSidebarOpen = !isExpanded;
+  }
+
+
+
+  selectedMenu = 'Rendez-vous'; // État pour suivre le menu actif
+
+  constructor(private router: Router) {}
+
+  activeItem: string = 'Rendez-vous';
+  onMenuSelect(menu: string) {
+    this.selectedMenu = menu;
+    this.activeItem = menu;
+    console.log(`Menu sélectionné : ${menu}`);
+
+    // Navigation logique en fonction du menu sélectionné
+    
+    switch (menu) {
+      case 'Patients':
+        this.router.navigate(['medecin/:id/patients']);
+        break;
+      case 'Rendez-vous':
+        this.router.navigate(['medecin/rendezvous']);
+        break;
+      case 'Ordonnances':
+        this.router.navigate(['medecin/ordonnances']);
+        break;
+      case 'Rapports':
+        this.router.navigate(['medecin/rapports']);
+        break;
+      default:
+        console.warn('Menu inconnu');
+    }
+  }
+
+
+
+
 }
