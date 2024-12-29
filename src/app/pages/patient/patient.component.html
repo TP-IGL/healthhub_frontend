@@ -1,0 +1,278 @@
+<div class="flex flex-col sm:flex-row min-h-screen bg-gray-100 overflow-hidden">
+  <!-- Sidebar -->
+  <app-side-bar 
+    (isSidebarOpenR)="toggleSidebar($event)" 
+    class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+    [ngClass]="{
+      '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }">
+  </app-side-bar>
+  <main 
+    class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+    [ngClass]="{
+      'ml-0 sm:ml-20': isSidebarOpen,
+      'ml-0 sm:ml-[250px]': !isSidebarOpen
+    }">
+     
+      <!-- Navbar -->
+      <nav class="flex flex-col md:flex-row items-center gap-4 pb-4 border-b  ">
+        <!-- Patient Photo -->
+        <img
+          [src]="patient.photo"
+          alt="Photo du patient"
+          class="w-24 h-24 md:w-44 md:h-44 object-cover  rounded-md "
+        />
+      
+        <!-- Patient Info -->
+        <div class="flex-1 w-full">
+          <div class="flex justify-start items-stretch gap-3 ">
+            <h2 class="text-xl font-bold text-gray-800 leading-none">
+              {{ patient.name }}
+            </h2>
+            <div class="relative group">
+              <button
+                class="p-2 bg-gray-200 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-blue-400"
+                (click)="PhoneNumber()"
+              >
+                <img
+                  src="assets/tel.svg"
+                  alt="Téléphone"
+                  class="w-5 h-5"
+                />
+              </button>
+              <div
+                *ngIf="showPhoneNumber"
+                class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-sm px-4 py-2 rounded shadow-lg border"
+              >
+                {{ patient.phone }}
+              </div>
+            </div>
+            <img src="assets/Sms.svg" alt="" class="pb-4">
+          </div>
+      
+          <!-- Information+++ -->
+            <div class="flex flex-wrap gap-4 mt-2 text-sm text-[#606469] items-center ">
+              <div class="flex  items-baseline gap-2">
+                <img src="assets/gender.svg" alt="" class="inline-block "> 
+                <span>{{patient.gender}}</span>
+              </div>
+              <div class="flex  items-center gap-2 ">
+                <img src="assets/localisation.svg" alt="" class="inline-block "> 
+                <span>{{patient.location}}</span>
+              </div>
+              <div class="flex  items-center gap-2">
+                <img src="assets/Calendar.svg" alt="" class="inline-block "> 
+                <span>{{patient.birth}}  ({{patient.age}} years )</span>
+              </div>
+              <div class="flex  items-center gap-2">
+                <img src="assets/nss.svg" alt="" class="inline-block "> 
+                <span>{{patient.socialSecurity}}</span>
+              </div>
+                
+            </div>
+            <!--Statistiques -->
+            <div class="flex flex-wrap gap-8 mt-2 text-sm text-gray-600">
+              <!--POIDs-->
+              <div class="flex flex-col  w-24 items-center justify-start border-x-2 border-y-2 border- border-dashed border-[#C0C0C0] ">
+                <p class="text-lg font-semibold">{{patient.weight}} <span class="text-[#C0C0C0] text-sm font-medium">Kg</span> </p>
+                <div class="flex items-center">
+                  <p class="text-[#C0C0C0]">Poids</p>
+                  <img src="assets/IMC.svg" alt="" class="mb-2">
+                </div>
+              <!--IMC-->
+              </div>
+                <div class="flex flex-col  w-24 items-center justify-start border-x-2 border-y-2 border- border-dashed border-[#C0C0C0] ">
+                  <p class= "text-lg font-semibold mb-0">{{patient.imc}} </p>
+                  <div class="flex items-center mt-0">
+                    <p class="text-[#C0C0C0]">IMC</p>
+                    <img src="assets/IMC.svg" alt="" class="mb-2">
+                  </div>
+                   <!--Longueur-->
+                </div>
+                <div class="flex flex-col  w-24 items-center justify-start border-x-2 border-y-2 border- border-dashed border-[#C0C0C0]">
+                  <p class="text-lg font-semibold">{{patient.height}} <span class="text-[#C0C0C0] text-sm font-medium">cm</span> </p>
+                  <div class="flex items-center">
+                    <p class="text-[#C0C0C0]">Hauteur</p>
+                  </div>
+
+                </div>
+
+            </div>
+         
+        </div>
+      </nav>
+
+     <!--HISTORIQUE ET ANALYSES--> 
+     <div class="flex flex-col md:flex-row justify-between items-start space-y-6 md:space-y-0 md:space-x-6 mt-8">
+      <!-- Historique des rendez-vous -->
+      <div class="w-full md:w-1/2 p-4  rounded-lg">
+        <div class="flex items-center gap-3 mb-4">
+          <img src="assets/historique1.svg" alt="" class="mb-3">
+          <h3 class="text-xl font-bold mb-0">Historique des séances</h3>
+        </div>
+        
+        <!-- Liste dynamique des rendez-vous -->
+        <div class="space-y-6">
+          <div *ngFor="let rendezvous of historique; let i = index" class="flex items-center space-x-4 relative">
+            <!-- Trait reliant les icônes entre elles (avant chaque élément sauf le premier) -->
+            <div *ngIf="i > -1" class="absolute left-0 top-1/2 transform -translate-y-1/2 w-full "></div>
+        
+            <!-- Date à gauche de l'icône -->
+            <div class="flex items-center w-1/3 md:w-1/4">
+              <p class="text-sm font-semibold">{{ rendezvous.date }}</p>
+            </div>
+        
+            <!-- Icône ronde pour chaque rendez-vous -->
+            <div class="w-8 h-8 md:w-10 md:h-10 rounded-full  flex items-center justify-center text-white relative">
+              <img src="assets/historique2.svg" alt="Icône" class="w-5 h-5">
+            </div>
+            
+            <!-- Détails du rendez-vous -->
+            <div class="flex-1">
+              <p class="text-lg font-semibold">{{ rendezvous.title }}</p>
+              <div class="flex flex-col mt-2">
+                <div class="flex items-center gap-3" >
+                  <img src="assets/ordonnacedown.svg" alt="" class="">
+                  <a href="ordonnance" class="text-blue-500 text-sm">{{ rendezvous.ordonnance }}</a>
+                </div>
+                <div class="flex items-center gap-3" >
+                  <img src="assets/rapportdown.svg" alt="" class="">
+                  <a href="#" class="text-blue-500 text-sm ">{{ rendezvous.rapport }}</a>
+                </div>
+                
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Barres graphiques -->
+      <div class="w-full md:w-1/2 p-4  border-2  rounded-lg">
+        <div class="flex items-center gap-3">
+          <img src="assets/analysemedical.svg" alt="" class="mb-3">
+          <h3 class="text-xl font-bold mb-0">Analyses Médicales</h3>
+        </div>
+        
+        <!-- Graphique en colonnes -->
+        <canvas #healthChart ></canvas>
+          
+        
+        <!-- Légende -->
+        <div class="mt-6 flex flex-wrap gap-4">
+          <!-- Glucose -->
+          <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-[#FABE7A] rounded mb-2"></div>
+            <div class="flex items-center space-x-1">
+              <p class="text-sm text-gray-600">Glucose</p>
+              <p class="text-sm text-gray-600">(mmol/L)</p>
+            </div>
+          </div>
+          
+          <!-- Tension -->
+          <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-[#F6595C] rounded mb-2"></div>
+            <div class="flex items-center space-x-1">
+              <p class="text-sm text-gray-600">Tension</p>
+              <p class="text-sm text-gray-600">(mmHg)</p>
+            </div>
+          </div>
+          
+          <!-- Protéines -->
+          <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-[#7661E2] rounded mb-2"></div>
+            <div class="flex items-center space-x-1">
+              <p class="text-sm text-gray-600">Protéines</p>
+              <p class="text-sm text-gray-600">(g/L)</p>
+            </div>
+          </div>
+          
+          <!-- Cholestérol -->
+          <div class="flex items-center space-x-2">
+            <div class="w-4 h-4 bg-[#F6866A] rounded mb-2"></div>
+            <div class="flex items-center space-x-1">
+              <p class="text-sm text-gray-600">Cholestérol</p>
+              <p class="text-sm text-gray-600">(mmol/L)</p>
+            </div>
+          </div>
+        </div>
+     </div> 
+  </div>  
+  
+  <!--Tableauuu-->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  
+    <!-- Tableau des examens -->
+    <div class="p-4 border-2 rounded-lg">
+      <div class="flex items-center gap-3 mb-4">
+        <img src="assets/imagerie.svg" alt="" class="mb-3 ">
+        <h3 class="text-xl font-bold mb-0">Imageries Médicales</h3>
+      </div>
+      
+      
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto">
+          <thead>
+            <tr class="bg-gray-100">
+              <th class="px-4 py-2 text-left">Nom de l'examen</th>
+              <th class="px-4 py-2 text-left">Type d'imagerie</th>
+              <th class="px-4 py-2 text-left">Date</th>
+              <th class="px-4 py-2 text-left">Télécharger</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let examen of examens">
+              <td class="px-4 py-2">{{ examen.nom }}</td>
+              <td class="px-4 py-2">{{ examen.typeImagerie }}</td>
+              <td class="px-4 py-2">{{ examen.date }}</td>
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-3">
+                  <img src="assets/rapportdown.svg" alt="" class="w-5 h-5">
+                  <a href="{{ examen.telechargerLink }}" class="text-blue-500">Télécharger l'image</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- Tableau des rapports médicaux -->
+    <div class="p-4 border-2 rounded-lg">
+      <div class="flex items-center gap-3 mb-4">
+        <img src="assets/rapportmedicalicon.svg" alt="" class="mb-3 ">
+        <h3 class="text-xl font-bold mb-0">Rapports Médicaux</h3>
+      </div>
+      
+      
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-auto">
+          <thead>
+            <tr class="bg-gray-100">
+              
+              
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rapport of rapports">
+              <td class="px-4 py-2">
+                <div class="flex items-center gap-3">
+                  <img src="assets/file.svg" alt="" class="">
+                  <div class="flex flex-col items-start">
+                    <a href="{{ rapport.fichierLink }}" class="text-blue-500">{{ rapport.nom }}</a>
+                    <p class="text-gray-500">{{ rapport.date }}</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+  </div>
+  
+
+  </main>
+</div>

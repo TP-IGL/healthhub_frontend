@@ -15,7 +15,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     MatIconModule, 
     AppComponent,
     FormsModule,
-    BrowserAnimationsModule  // Ajout du module MatIconModule
+    BrowserAnimationsModule ,
+    
+   // Ajout du module MatIconModule
   ],
   providers: [],
   bootstrap: []

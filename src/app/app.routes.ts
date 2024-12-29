@@ -12,6 +12,7 @@ import { RendezvousComponent } from './pages/rendezvous/rendezvous.component';
 import { PatientsComponent } from './pages/patients/patients.component';
 import { OrdonnancesComponent } from './pages/ordonnances/ordonnances.component';
 import { RapportsComponent } from './pages/rapports/rapports.component';
+import { PatientComponent } from './pages/patient/patient.component';
 
 export const routes: Routes = [
   {
@@ -63,6 +64,9 @@ export const routes: Routes = [
   },
   {
     path: 'medecin/rapports', component: RapportsComponent
+  },
+  {
+    path : "patient" , component : PatientComponent , 
   },
   
 ];
