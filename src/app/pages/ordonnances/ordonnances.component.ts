@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
-import { Rendezvous, TableaurdvComponent } from '../../components/tableaurdv/tableaurdv.component'
-import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-bar-medecin.component';
 import { jsPDF } from 'jspdf'
 import { FormsModule } from '@angular/forms';
@@ -19,7 +16,7 @@ interface PdfFile {
 }
 @Component({
   selector: 'app-ordonnances',
-  imports: [ CommonModule, ModaldialogComponent, SideBarMedecinComponent,FormsModule],
+  imports: [ CommonModule, SideBarMedecinComponent,FormsModule],
   templateUrl: './ordonnances.component.html',
   styleUrl: './ordonnances.component.css'
 })

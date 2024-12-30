@@ -4,8 +4,9 @@ import { AppComponent } from './app.component';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-
-
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './services/auth/auth.reducer';
+import { AuthService } from './services/auth/auth.service';
 @NgModule({
   declarations: [
     
@@ -15,7 +16,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
     MatIconModule, 
     AppComponent,
     FormsModule,
-    BrowserAnimationsModule  // Ajout du module MatIconModule
+    StoreModule.forRoot({ auth : authReducer }),
+    BrowserAnimationsModule , 
   ],
   providers: [],
   bootstrap: []

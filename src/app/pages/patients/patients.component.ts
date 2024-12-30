@@ -1,4 +1,4 @@
-import { Component  , SimpleChanges} from '@angular/core';
+import { Component  , SimpleChange, SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { MedCardsComponent } from '../../components/med-cards/med-cards.component';
@@ -27,7 +27,11 @@ export class PatientsComponent {
     toggleSidebar(isExpanded:boolean) {
       this.isSidebarOpen = !isExpanded;
     }
-  
+    ngOnChanges(changes: SimpleChanges): void {
+      if (changes['isSidebarOpen']) {
+        console.log(changes['isSidebarOpen'].currentValue);
+      }
+    }
   
   
     selectedMenu = 'Patients'; // État pour suivre le menu actif

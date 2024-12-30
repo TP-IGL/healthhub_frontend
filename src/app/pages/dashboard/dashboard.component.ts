@@ -8,6 +8,10 @@ import { SideBarComponent } from '../../components/side-bar/side-bar.component';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
+import { Store } from '@ngrx/store';
+import { AuthState } from '../../services/auth/auth.reducer';
+import { Observable } from 'rxjs';
+import { AuthService } from '../../services/auth/auth.service';
 @Component({
   selector: 'app-dashboard',
   imports: [MatIconModule, CommonModule, SideBarComponent, FormsModule, ModaldialogComponent],
@@ -23,6 +27,11 @@ export class DashboardComponent {
     this.isSidebarOpen = !isExpanded;
   }
   userName:string="Belaid";
+
+  constructor(private store: Store<AuthState> ) {
+
+  }
+
 
 
 

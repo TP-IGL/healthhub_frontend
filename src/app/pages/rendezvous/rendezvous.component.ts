@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
-import { SideBarComponent } from "../../components/side-bar/side-bar.component";
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
 import { Rendezvous, TableaurdvComponent } from '../../components/tableaurdv/tableaurdv.component'
-import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 import { AddRdvComponent } from "../../components/add-rdv/add-rdv.component";
 import { Router } from '@angular/router';
 import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-bar-medecin.component';
 @Component({
   selector: 'app-rendezvous',
-  imports: [SideBarComponent, CommonModule, TableaurdvComponent, ModaldialogComponent, AddRdvComponent, SideBarMedecinComponent],
+  imports: [CommonModule, TableaurdvComponent, AddRdvComponent, SideBarMedecinComponent],
   templateUrl: './rendezvous.component.html',
   styleUrl: './rendezvous.component.css'
 })

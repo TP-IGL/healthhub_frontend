@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common'
-import { Rendezvous, TableaurdvComponent } from '../../components/tableaurdv/tableaurdv.component'
-import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-bar-medecin.component';
-import { jsPDF } from 'jspdf'
 import { FormsModule } from '@angular/forms';
 
 
@@ -13,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-rapports',
-  imports: [CommonModule, ModaldialogComponent, SideBarMedecinComponent,FormsModule],
+  imports: [CommonModule ,  SideBarMedecinComponent,FormsModule],
   templateUrl: './rapports.component.html',
   styleUrl: './rapports.component.css'
 })
