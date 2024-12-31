@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
     } else {
       // Handle form invalid case
       this.error = "Form is invalid"
-      console.log('Form is invalid');
     }
   }
 }

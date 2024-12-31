@@ -14,20 +14,19 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router, private store: Store<{auth : AuthState}>) {}
 
   login(username: string, password: string) {
-    this.http.post<{ token: string }>(this.apiURL, { username, password })
+    this.http.post<{ token: string , user : { username : string , id : string , email : string , role : string , } }>(this.apiURL, { username, password })
       .subscribe({
         next: (response) => {
+          console.log(response.user)
           if (response.token) {
-            this.store.dispatch(loginSuccess({ token: response.token})); // Dispatch login success action
-            this.saveToken(response.token);
-
+            this.store.dispatch(loginSuccess({ token: response.token , username : response.user.username , id : response.user.id , email:response.user.email , role:response.user.role})); // Dispatch login success action
+            this.saveToken(response.token)
+            this.redirectBasedOnRole(response.user.role , response.user.id)
         
           }
         },
         error: (error) => {
           this.store.dispatch(loginFailure({ error :  error.error.detail || 'Login failed' })); // Dispatch login failure action
-          console.log("true errto is : " )
-          console.log(error.error.detail)
         }
       });
   }
@@ -37,7 +36,17 @@ export class AuthService {
     localStorage.setItem('access_token', token); // Save the token to localStorage
     this.router.navigate(['/dashboard']); // Redirect to dashboard on successful login
   }
-
+  redirectBasedOnRole(role: string, id: string): void {
+    if (role === 'admin') {
+      this.router.navigate(['/dashboard']);
+    } else if (role === 'medecin') {
+      this.router.navigate([`/medecin/${id}/patients`]);
+    } else if (role === 'patient') {
+      this.router.navigate([`/patient/${id}`]);
+    } else {
+      this.router.navigate(['/']); // Default fallback
+    }
+  }
   getToken(): string | null {
     return localStorage.getItem('access_token'); // Retrieve the token from localStorage
   }

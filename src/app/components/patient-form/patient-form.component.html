@@ -1,0 +1,198 @@
+<div class="w-full mt-10 bg-white shadow-md rounded-lg p-6">
+    <h2 class="text-2xl font-bold text-center mb-6">Ajouter un patient</h2>
+  
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Username -->
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
+          <input
+            id="username"
+            formControlName="username"
+            type="text"
+            placeholder="Entrez le nom d'utilisateur"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-red-500 text-xs">
+            Nom d'utilisateur est requis.
+          </small>
+        </div>
+  
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input
+            id="email"
+            formControlName="email"
+            type="email"
+            placeholder="Entrez votre email"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs">
+            Email valide est requis.
+          </small>
+        </div>
+  
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            placeholder="Entrez un mot de passe"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-red-500 text-xs">
+            Minimum 6 caractères requis.
+          </small>
+        </div>
+  
+        <!-- NSS (Numéro de sécurité sociale) -->
+        <div>
+          <label for="nss" class="block text-sm font-medium text-gray-700">Numéro de sécurité sociale (NSS)</label>
+          <input
+            id="nss"
+            formControlName="nss"
+            type="text"
+            placeholder="Entrez votre NSS"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('nss')?.invalid && userForm.get('nss')?.touched" class="text-red-500 text-xs">
+            NSS est requis et doit être un numéro à 10 chiffres.
+          </small>
+        </div>
+  
+        <!-- Full Name (Nom et Prénom) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="nom" class="block text-sm font-medium text-gray-700">Nom</label>
+            <input
+              id="nom"
+              formControlName="nom"
+              type="text"
+              placeholder="Entrez le nom"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+  
+          <div>
+            <label for="prenom" class="block text-sm font-medium text-gray-700">Prénom</label>
+            <input
+              id="prenom"
+              formControlName="prenom"
+              type="text"
+              placeholder="Entrez le prénom"
+              class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+  
+        <!-- Date of Birth -->
+        <div>
+          <label for="dateNaissance" class="block text-sm font-medium text-gray-700">Date de naissance</label>
+          <input
+            id="dateNaissance"
+            formControlName="dateNaissance"
+            type="date"
+            placeholder="Sélectionnez votre date de naissance"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+          <small *ngIf="userForm.get('dateNaissance')?.invalid && userForm.get('dateNaissance')?.touched" class="text-red-500 text-xs">
+            Date de naissance est requise.
+          </small>
+        </div>
+  
+        <!-- Adresse -->
+        <div>
+          <label for="adresse" class="block text-sm font-medium text-gray-700">Adresse</label>
+          <input
+            id="adresse"
+            formControlName="adresse"
+            type="text"
+            placeholder="Entrez l'adresse"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+  
+        <!-- Telephone -->
+        <div>
+          <label for="telephone" class="block text-sm font-medium text-gray-700">Téléphone</label>
+          <input
+            id="telephone"
+            formControlName="telephone"
+            type="text"
+            placeholder="Entrez votre numéro de téléphone"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+  
+        <!-- Mutuelle -->
+        <div>
+          <label for="mutuelle" class="block text-sm font-medium text-gray-700">Mutuelle</label>
+          <input
+            id="mutuelle"
+            formControlName="mutuelle"
+            type="text"
+            placeholder="Entrez la mutuelle"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+  
+        <!-- Contact d'urgence -->
+        <div>
+          <label for="contactUrgence" class="block text-sm font-medium text-gray-700">Contact d'urgence</label>
+          <input
+            id="contactUrgence"
+            formControlName="contactUrgence"
+            type="text"
+            placeholder="Entrez le contact d'urgence"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+  
+        <!-- Médecin -->
+        <div>
+          <label for="medecin" class="block text-sm font-medium text-gray-700">Médecin</label>
+          <input
+            id="medecin"
+            formControlName="medecin"
+            type="text"
+            placeholder="Entrez le nom du médecin (si applicable)"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+  
+        <!-- Centre Hospitalier -->
+        <div>
+          <label for="centreHospitalier" class="block text-sm font-medium text-gray-700">Centre hospitalier</label>
+          <input
+            id="centreHospitalier"
+            formControlName="centreHospitalier"
+            type="number"
+            placeholder="Entrez le numéro du centre hospitalier"
+            class="w-full mt-1 px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+      </div>
+  
+      <!-- Buttons -->
+      <div class="flex justify-between mt-6">
+        <button
+          type="button"
+          (click)="onReset()"
+          class="px-6 py-2  bg-white border-2 border-gray-400 rounded-md "
+        >
+          Annuler
+        </button>
+        <button
+          type="submit"
+          class="px-6 py-2 bg-[#5932EA] cursor-pointer text-white rounded-md hover:bg-[#3f22b5]"
+        >
+          Ajouter
+        </button>
+      </div>
+    </form>
+  </div>
+  

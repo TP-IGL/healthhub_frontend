@@ -18,6 +18,9 @@ import { AuthService } from './services/auth/auth.service';
     FormsModule,
     StoreModule.forRoot({ auth : authReducer }),
     BrowserAnimationsModule , 
+    BrowserAnimationsModule ,
+    
+   // Ajout du module MatIconModule
   ],
   providers: [],
   bootstrap: []
