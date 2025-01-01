@@ -48,7 +48,7 @@ export class UserService {
         map(response => response),
         catchError(error => {
           console.error('Error creating patient:', error);
-          return of(null);
+          return error;
         })
       );
     }else {
@@ -59,15 +59,13 @@ export class UserService {
 
   // Create user method
   createUser(user: AdminUserCreate): Observable<any> {
-    console.log("this header 1 ")
     const headers = this.getAuthHeaders();
-    console.log(headers)
     if (headers) {
       return this.http.post("http://localhost:8000/api/admin/users/create/", user, { headers }).pipe(
         map(response => { console.log(response) ; return response}),
         catchError(error => {
           console.error('Error creating user:', error);
-          return of(null);
+          return error;
         })
       );
     }else {
@@ -120,14 +118,13 @@ export class UserService {
   }
 
   // Get all users with pagination
-  getAllUsers(page: string): Observable<any> {
+  getAllUsers(page: number | null): Observable<any> {
     const usersUrl = `${this.userUrl}?page=${page}`;
     
     const headers = this.getAuthHeaders();
-    console.log("iheader 2" , headers)
     if (headers) {
       return this.http.get<UserResponse>(usersUrl, { headers }).pipe(
-        map((result) => result.results), // Extract only the results from the response
+        map((result) => result), // Extract only the results from the response
         catchError(error => {
           console.error('Error fetching users:', error);
           return of(null); // Return an observable with null in case of error

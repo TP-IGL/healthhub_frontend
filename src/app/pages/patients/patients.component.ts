@@ -8,6 +8,9 @@ import { NgModule } from '@angular/core';
 import { Router } from '@angular/router';
 import { ModaldialogComponent } from '../../components/modaldialog/modaldialog.component';
 import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-bar-medecin.component';
+import { MedecinService } from '../../services/medecin/medecin.service';
+import { AuthState } from '../../services/auth/auth.reducer';
+import { Patients, PatientsListResponse, UsersByDoctor } from '../../../types';
 @Component({
   selector: 'app-patients',
   imports: [CommonModule, SideBarMedecinComponent, MedCardsComponent, PatientsTableComponent, AddPatientModalComponent],
@@ -17,6 +20,68 @@ import { SideBarMedecinComponent } from '../../components/side-bar-medecin/side-
 export class PatientsComponent {
   
   isModalOpen:boolean = false;
+  authState : AuthState | null = null ; 
+  medName : string | null = "ahmed" ; 
+  private medID : string | null = null ; 
+  constructor(private router: Router ,private medService : MedecinService) {
+    const jsonData = localStorage.getItem('authState');
+
+    if (jsonData) {
+      try {
+        this.authState = JSON.parse(jsonData);
+        if (this.authState) {
+          this.medName =this.authState?.username
+          this.medID = this.authState?.id
+        }
+        
+      } catch (error) {
+        console.error('Error parsing auth state from localStorage:', error);
+      }
+    }
+  }
+
+    results : Patients[] = []
+    patients : Patients[] = []
+    ngOnInit(): void {
+      //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+      //Add 'implements OnInit' to the class.
+      this.fetchAllUsers(1)
+    }
+    fetchAllUsers(page: number): void {
+      if (this.medID) {
+        this.medService.listPatients(this.medID , '' , '' , page).subscribe({
+          next: (users: UsersByDoctor) => {
+            if (users) {
+              // Append current page results
+              this.results = [...this.results, ...users.results];
+              // If there is a next page, recursively fetch the next page
+              if (users.next) {
+                const nextPage = this.getPageNumberFromUrl(users.next);
+                this.fetchAllUsers(nextPage); // Recursive call to fetch the next page
+              } else {
+                // All pages are fetched, you can log or do something with the results
+                // If needed, filter users by role here
+                this.patients = this.results
+              }
+            } else {
+              console.log('No users found or an error occurred.');
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching users:', err);
+          }
+        });
+      } 
+      
+    }
+  
+    // Helper method to extract the page number from the "next" URL
+    getPageNumberFromUrl(url: string): number {
+      const match = url.match(/page=(\d+)/);  // Extract the page number from the URL
+      return match ? parseInt(match[1], 10) : 1;  // Return the page number or 1 if not found
+    }
+
+
   toggleModal(): void {
     this.isModalOpen = !this.isModalOpen;
   }
@@ -36,7 +101,6 @@ export class PatientsComponent {
   
     selectedMenu = 'Patients'; // État pour suivre le menu actif
   
-    constructor(private router: Router) {} // Injection du service Router
     
 
     activeItem: string = 'Patients';

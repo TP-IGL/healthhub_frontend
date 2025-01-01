@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
+import { DossierMedicalDetail, Patients, UsersByDoctor } from '../../../types';
+import { MedecinService } from '../../services/medecin/medecin.service';
+import { AuthState } from '../../services/auth/auth.reducer';
+import { Router } from '@angular/router';
 
 
 
@@ -12,75 +16,84 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class PatientsTableComponent {
-  users = [
-    {
-      name: 'Olivia Rhye',
-      email: '@Olivia',
-      Status: 'Active',
-      lastVisit: new Date('2024-01-01'),
-      phone: '+213 675-788-568',
-      nextAppointment: new Date('2024-01-10'),
-      photo: '/assets/pic.png'
-    },
-    {
-      name: 'James Johnson',
-      email: '@James',
-      Status: 'Active',
-      lastVisit: new Date('2024-02-15'),
-      phone: '+213 676-123-456',
-      nextAppointment: new Date('2024-03-01'),
-      photo: '/assets/pic.png'
-    },
-    {
-      name: 'Emily Carter',
-      email: '@Emily',
-      Status: 'Sorite',
-      lastVisit: new Date('2024-01-20'),
-      phone: '+213 677-987-654',
-      nextAppointment: new Date('2024-02-15'),
-      photo: '/assets/pic.png'
-    },
-    {
-      name: 'Daniel Wilson',
-      email: '@Daniel',
-      Status: 'En consultation',
-      lastVisit: new Date('2024-01-05'),
-      phone: '+213 678-654-321',
-      nextAppointment: new Date('2024-01-25'),
-      photo: '/assets/pic.png'
-    },
-    {
-      name: 'Sophia Brown',
-      email: '@Sophia',
-      Status: 'Sorite',
-      lastVisit: new Date('2024-02-01'),
-      phone: '+213 679-321-987',
-      nextAppointment: new Date('2024-02-20'),
-      photo: '/assets/pic.png'
+  private authState : AuthState | null = null
+  private medID : string | null = null
+  private medName : string | null = null
+  constructor(private datePipe: DatePipe , private medService : MedecinService , private router : Router  ) {
+    const jsonData = localStorage.getItem('authState');
+
+    if (jsonData) {
+      try {
+        this.authState = JSON.parse(jsonData);
+        if (this.authState) {
+          this.medName =this.authState?.username
+          this.medID = this.authState?.id
+        }
+        
+      } catch (error) {
+        console.error('Error parsing auth state from localStorage:', error);
+      }
     }
-  ];
+  }
+    results : Patients[] = []
+    patients : Patients[] = []
+    ngOnInit(): void {
+      //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+      //Add 'implements OnInit' to the class.
+      this.fetchAllUsers(1)
+    }
+    fetchAllUsers(page: number): void {
+      if (this.medID) {
+        this.medService.listPatients(this.medID , '' , '' , page).subscribe({
+          next: (users: UsersByDoctor) => {
+            if (users) {
+              // Append current page results
+              this.results = [...this.results, ...users.results];
+              // If there is a next page, recursively fetch the next page
+              if (users.next) {
+                const nextPage = this.getPageNumberFromUrl(users.next);
+                this.fetchAllUsers(nextPage); // Recursive call to fetch the next page
+              } else {
+                // All pages are fetched, you can log or do something with the results
+                // If needed, filter users by role here
+                this.patients = this.results
+              }
+            } else {
+              console.log('No users found or an error occurred.');
+            }
+          },
+          error: (err) => {
+            console.error('Error fetching users:', err);
+          }
+        });
+      } 
+      
+    }
+  
+    // Helper method to extract the page number from the "next" URL
+    getPageNumberFromUrl(url: string): number {
+      const match = url.match(/page=(\d+)/);  // Extract the page number from the URL
+      return match ? parseInt(match[1], 10) : 1;  // Return the page number or 1 if not found
+    }
+  
 
   isAscending = true;
   page: number = 1; 
   itemsPerPage: number = 3; 
   currentPage: number = 1;
 
-  constructor(private datePipe: DatePipe) {}
+
 
   get totalPages(): number {
-    return Math.ceil(this.users.length / this.itemsPerPage);
+    return Math.ceil(this.patients.length / this.itemsPerPage);
+  }
+  
+
+  goToPatient(nss: string) {
+    this.router.navigate([`medecin/${this.medID}/patients/${nss}`])
   }
 
-  sortByStatus() {
-    this.users.sort((a, b) => {
-      if (this.isAscending) {
-        return a.Status.localeCompare(b.Status);
-      } else {
-        return b.Status.localeCompare(a.Status);
-      }
-    });
-    this.isAscending = !this.isAscending;
-  }
+
 
   formatDate(date: Date): string {
     return this.datePipe.transform(date, 'dd/MM/yyyy')!;
@@ -89,7 +102,7 @@ export class PatientsTableComponent {
   getUser() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
-    return this.users.slice(start, end);
+    return this.patients.slice(start, end);
   }
 
   // Pagination logic

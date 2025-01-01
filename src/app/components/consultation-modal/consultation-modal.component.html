@@ -1,0 +1,101 @@
+<div *ngIf="isModalOpen" class="modal-container">
+    <div class="modal-content bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
+      <button (click)="toggleModalOpen()" class="absolute top-4 right-4 text-gray-600 text-2xl">&times;</button>
+      
+      <!-- Consultation Details -->
+      <div class="modal-section mb-6">
+        <h2 class="font-bold text-xl mb-4">Consultation Details</h2>
+        <ul class="list-disc pl-6 text-gray-700">
+          <li><strong>Date:</strong> {{ consultation?.dateConsultation }}</li>
+          <li><strong>Status:</strong> {{ consultation?.status }}</li>
+          <li><strong>Medecin:</strong> {{ consultation?.medecin_name }}</li>
+          <li><strong>Diagnostic:</strong> {{ consultation?.diagnostic }}</li>
+          <li><strong>Resume:</strong> {{ consultation?.resume }}</li>
+        </ul>
+      </div>
+  
+      <!-- Ordonnances -->
+      <div *ngIf="consultation?.ordonnances?.length" class="modal-section mb-6">
+        <h3 class="font-bold text-lg mb-4">Ordonnances</h3>
+        <ul class="list-disc pl-6">
+          <li *ngFor="let ordonnance of consultation?.ordonnances">
+            <strong>Ordonnance ID:</strong> {{ ordonnance.ordonnanceID }}<br />
+            <strong>Valide:</strong> {{ ordonnance.valide ? 'Yes' : 'No' }}<br />
+            <strong>Date Création:</strong> {{ ordonnance.dateCreation }}<br />
+            <strong>Date Expiration:</strong> {{ ordonnance.dateExpiration }}<br />
+            <strong>Medicaments:</strong>
+            <ul class="list-disc pl-6">
+              <li *ngFor="let med of ordonnance.medicaments">
+                <strong>{{ med.medicament.nom }}</strong> ({{ med.duree }})<br />
+                <span>{{ med.dosage }}</span><br />
+                <span>{{ med.frequence }}</span><br />
+                <span>{{ med.instructions }}</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Examens -->
+      <div *ngIf="consultation?.examens?.length " class="modal-section mb-6">
+        <h3 class="font-bold text-lg mb-4">Examens</h3>
+        <ul class="list-disc pl-6">
+          <li *ngFor="let examen of consultation?.examens">
+            <strong>Examen ID:</strong> {{ examen.examenID }}<br />
+            <strong>Type:</strong> {{ examen.type }}<br />
+            <strong>Medecin:</strong> {{ examen.medecin_name }}<br />
+            <strong>Status:</strong> {{ examen.etat }}<br />
+            <strong>Priorité:</strong> {{ examen.priorite }}<br />
+            <strong>Doctor Details:</strong> {{ examen.doctor_details || 'N/A' }}<br />
+            <div *ngIf="examen.resultat_labo.length > 0">
+              <strong>Resultat Labo:</strong>
+              <ul class="list-disc pl-6">
+                <li *ngFor="let res of examen.resultat_labo">
+                  <strong>{{ res.laboratin_name }}:</strong> {{ res.resultat }}<br />
+                  <strong>Status:</strong> {{ res.status }}<br />
+                  <strong>Health Metrics:</strong> 
+                  <ul class="list-disc pl-6">
+                    <li *ngFor="let metric of res.health_metrics">
+                      <strong>{{ metric.metric_type }}:</strong> {{ metric.value }} {{ metric.unit }} ({{ metric.measured_at }})
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <div *ngIf="examen.resultat_radio.length > 0">
+              <strong>Resultat Radio:</strong>
+              <ul class="list-disc pl-6">
+                <li *ngFor="let res of examen.resultat_radio">
+                  <strong>{{ res.radiologue_name }}:</strong> {{ res.rapport }}<br />
+                  <strong>Type:</strong> {{ res.type }}<br />
+                  <strong>Date Réalisation:</strong> {{ res.dateRealisation }}<br />
+                  <strong>Radio Image:</strong> <img *ngIf="res.radioImgURL" [src]="res.radioImgURL" alt="radio image" class="max-w-full mt-2" />
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Activités Infirmer -->
+      <div *ngIf="consultation?.activites_infermier?.length " class="modal-section mb-6">
+        <h3 class="font-bold text-lg mb-4">Activités Infirmer</h3>
+        <ul class="list-disc pl-6">
+          <li *ngFor="let activity of consultation?.activites_infermier">
+            <strong>Activité ID:</strong> {{ activity.id }}<br />
+            <strong>Infirmier:</strong> {{ activity.infermier_name }}<br />
+            <strong>Type:</strong> {{ activity.typeActivite }}<br />
+            <strong>Observation:</strong> {{ activity.nurse_observations }}<br />
+            <strong>Status:</strong> {{ activity.status }}<br />
+            <strong>Details:</strong> {{ activity.doctors_details }}
+          </li>
+        </ul>
+      </div>
+  
+      <!-- Modal Footer -->
+      <div class="flex justify-end mt-6">
+        <button (click)="toggleModalOpen()" class="px-4 py-2 bg-blue-600 text-white rounded-md">Fermer</button>
+      </div>
+    </div>
+  </div>
+  

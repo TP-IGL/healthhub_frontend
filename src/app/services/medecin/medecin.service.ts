@@ -1,0 +1,192 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthState } from '../auth/auth.reducer';
+import { ConsultationCreateUpdate, Consultations, DossierMedicalDetail, Examens, ExaminationCreate, LaborantinListResponse, OrdonnanceCreate, OrdonnanceMedicamentCreate, OrdonnancesListResponse, PatientsListResponse, RadiologueListResponse } from '../../../types';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class MedecinService {
+  private medURL: string = 'http://127.0.0.1:8000/api/medecin/consultations/';
+  private examURL: string = 'http://127.0.0.1:8000/api/medecin/examinations/' ; 
+  private laborantinURL: string = 'http://127.0.0.1:8000/api/medecin/hospital/' 
+  private docURL :string = 'http://127.0.0.1:8000/api/medecin/doctors/'
+  private searchURL : string = '/medecin/medecin/patients/search/'
+  constructor(private http: HttpClient) {}
+
+  private getAuthHeaders(): HttpHeaders | null {
+    const jsonData = localStorage.getItem('authState');
+    let authState: AuthState | null = null;
+
+    if (jsonData) {
+      try {
+        authState = JSON.parse(jsonData);
+      } catch (error) {
+        console.error('Error parsing auth state from localStorage:', error);
+      }
+    }
+
+    if (authState?.isAuthenticated && authState?.role === 'medecin' && authState?.token) {
+      const httpHeader = new HttpHeaders({
+        'Authorization': `Token ${authState.token}`,
+        'Content-Type': 'application/json',
+      });
+      return httpHeader;
+    } else {
+      console.error('Unauthorized: User is not authenticated or not a medecin');
+      return null;
+    }
+  }
+
+  // Create consultation
+  createConsultation(data: {
+    patient_id: string;
+    diagnostic: string;
+    resume: string;
+    status: string;
+  }): Observable<ConsultationCreateUpdate> {
+    const headers = new HttpHeaders({
+      'accept': 'application/json',
+      'Authorization': 'Token 85fa26aa1898ecb548b7758a4f5c6a86f8fb168e',
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.post<ConsultationCreateUpdate>(this.medURL, data, { headers });
+  }
+
+  // Fetch consultation details by ID
+  fetchConsultation(consultationID: string): Observable<Consultations> {
+    const headers = this.getAuthHeaders();
+
+    if (!headers) {
+      throw new Error('Authorization headers are missing.');
+    }
+
+    const url = `${this.medURL}${consultationID}/`;
+    return this.http.get<Consultations>(url, { headers });
+  }
+
+    // Update consultation (PATCH)
+    updateConsultation(
+      consultationID: string,
+      data: {
+        patient_id: string;
+        diagnostic: string;
+        resume: string;
+        status: string;
+      }
+    ): Observable<ConsultationCreateUpdate> {
+      const headers = this.getAuthHeaders();
+  
+      if (!headers) {
+        throw new Error('Authorization headers are missing.');
+      }
+  
+      const url = `${this.medURL}${consultationID}/`;
+      return this.http.patch<ConsultationCreateUpdate>(url, data, { headers });
+    }
+
+    // Create an examination (POST)
+  createExamination(
+    consultationID: string,
+    data:ExaminationCreate
+  ): Observable<ExaminationCreate> {
+    const headers = this.getAuthHeaders();
+
+    if (!headers) {
+      throw new Error('Authorization headers are missing.');
+    }
+
+    const url = `${this.medURL}${consultationID}/examinations/`;
+    return this.http.post<ExaminationCreate>(url, data, { headers });
+  }
+    // Create a new prescription for a consultation
+    createPrescription(consultationId: string, data: {
+      dateExpiration: string;
+      medicaments: OrdonnanceMedicamentCreate[];
+    }): Observable<OrdonnanceCreate> {
+      const headers = this.getAuthHeaders();
+      if (!headers) {
+        throw new Error('Authorization failed');
+      }
+  
+      const url = `${this.medURL}${consultationId}/prescriptions/`;
+  
+      return this.http.post<OrdonnanceCreate>(url, data, { headers });
+    }
+
+      // List all prescriptions for a consultation
+  listPrescriptions(consultationId: string, page: number): Observable<OrdonnancesListResponse> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      throw new Error('Authorization failed');
+    }
+
+    const url = `${this.medURL}${consultationId}/prescriptions/list/?page=${page}`;
+
+    return this.http.get<OrdonnancesListResponse>(url, { headers });
+  }
+
+   // List all patients associated with a doctor
+   listPatients(
+    doctorId: string,
+    search: string  = '',
+    ordering: string = '',
+    page: number = 1
+  ): Observable<PatientsListResponse> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      throw new Error('Authorization failed');
+    }
+
+    const url = `${this.docURL}${doctorId}/patients/?search=${search}&ordering=${ordering}&page=${page}`;
+    return this.http.get<PatientsListResponse>(url, { headers });
+  }
+
+   // Fetch examination details by ID
+   getExaminationById(examId: number): Observable<Examens> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      throw new Error('Authorization failed');
+    }
+
+    const url = `${this.examURL}${examId}/`;
+    return this.http.get<Examens>(url, { headers });
+  }
+
+    // List all laborantins for a specific hospital
+    getLaborantins(hospitalId: string, page: number = 1): Observable<LaborantinListResponse> {
+      const headers = this.getAuthHeaders();
+      if (!headers) {
+        throw new Error('Authorization failed');
+      }
+  
+      const url = `${this.laborantinURL}${hospitalId}/laborantins/?page=${page}`;
+      return this.http.get<LaborantinListResponse>(url, { headers });
+    }
+
+      // List all radiologists for a specific hospital
+  getRadiologues(hospitalId: string, page: number = 1): Observable<RadiologueListResponse> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      throw new Error('Authorization failed');
+    }
+
+    const url = `${this.laborantinURL}${hospitalId}/radiologues/?page=${page}`;
+    return this.http.get<RadiologueListResponse>(url, { headers });
+  
+  }
+  // get dossize 
+  getDossierMedicalDetail(type: string, id: string): Observable<DossierMedicalDetail> {
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      throw new Error('Authorization failed');
+    } 
+
+    const url = `${this.searchURL}/&type${type}/&${id}/`;
+
+    return this.http.get< DossierMedicalDetail  >(url, { headers });
+  }
+
+}

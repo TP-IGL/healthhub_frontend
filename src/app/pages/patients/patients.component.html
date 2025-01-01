@@ -22,7 +22,7 @@
     <div class="flex-col items-center space-y-2 justify-center">
         <div class="flex items-center  space-x-2">
             <div><img src="/assets/main.png"/></div>
-            <div class="font-bold text-xl">Bienvenue, Dr. Hakim</div>
+            <div class="font-bold text-xl">Bienvenue, {{medName}}</div>
         </div>
         <div>
             <p class="text-[#806B6B] ">
@@ -30,13 +30,10 @@
             </p>
         </div>
         <div>
-            <app-med-cards [isSidebarOpen]="isSidebarOpen"/>
+            <app-med-cards [isSidebarOpen]="isSidebarOpen" [numOrdanace]="0" [numPatients]="patients.length" />
         </div>
         <div class="flex justify-between pt-8 items-center">
             <div class="font-semibold text-xl">Gestion des Patients</div>
-            <div>
-                <button class="bg-[#714FED] rounded-lg p-2 text-white font-bold hover:bg-[#8d70f8] cursor-pointer" (click)="toggleModal()">+ Ajouter un Patient</button>
-            </div>
         </div>
         <div class="pt-4">
             <app-patients-table/>

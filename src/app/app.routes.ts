@@ -18,6 +18,7 @@ import { PatientComponent } from './pages/patient/patient.component';
 // Guards
 import { AuthGuard } from './guards/auth.guard';
 import { AddPatientComponent } from './pages/add-patient/add-patient.component';
+import { PatientDetaileComponent } from './pages/patient-detaile/patient-detaile.component';
 
 export const routes: Routes = [
   // Public routes
@@ -85,6 +86,12 @@ export const routes: Routes = [
   {
     path: 'medecin/:id/rapports',
     component: RapportsComponent,
+    canActivate: [AuthGuard],
+    data : {role : 'medecin'}
+  },
+  {
+    path: 'medecin/:id/patients/:patientID',
+    component: PatientDetaileComponent,
     canActivate: [AuthGuard],
     data : {role : 'medecin'}
   },

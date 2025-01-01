@@ -8,5 +8,7 @@ import { Component, Input  } from '@angular/core';
 })
 export class MedCardsComponent {
   @Input() isSidebarOpen  : boolean  = false
-
+  @Input() numPatients : number | undefined = 0
+  @Input() numRendezVous : number | undefined = 0 
+  @Input() numOrdanace : number | undefined = 0
 }

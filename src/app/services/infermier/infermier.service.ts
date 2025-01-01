@@ -24,7 +24,7 @@ export class InfermierService {
       }
     }
 
-    if (authState?.isAuthenticated && authState?.role === 'admin' && authState?.token) {
+    if (authState?.isAuthenticated && authState?.role === 'infermier' && authState?.token) {
       const httpHeader = new HttpHeaders({
         'Authorization': `Token ${authState.token}`,
         'Content-Type': 'application/json'

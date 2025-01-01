@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AuthState } from '../../services/auth/auth.reducer';
 import { logout } from '../../services/auth/auth.actions';
 import { UserService } from '../../services/patients/user.service';
+import { AdminUser, UsersResponseFront } from '../../../types';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,24 +22,59 @@ export class DashboardComponent implements OnInit {
   modalDialog: any;
   userName: string = "Belaid";
 
-  users: any[] = []; // Dynamic users array to be populated with API data
 
   searchQuery = '';
   sortCriteria = '';
   currentPage = 1;
   itemsPerPage = 5;
 
-  constructor(private store: Store<AuthState>, private userService: UserService) { }
+  constructor(private store: Store<AuthState>, private CreateUserService: UserService) { }
 
+  results :AdminUser[] = []
+  medcins : AdminUser[] = []
+  radio : AdminUser[] = []
+  infer : AdminUser[] = []
+  pat : AdminUser[] = []
   ngOnInit(): void {
-    // Fetch users dynamically when the component initializes
-    this.userService.getAllUsers('1').subscribe(results => {
-      if (results) {
-        this.users = results; // Update the users array with API results
-      } else {
-        console.log('No users found or error occurred');
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.fetchAllUsers(1)
+    console.log("1")
+  }
+
+  fetchAllUsers(page: number): void {
+    this.CreateUserService.getAllUsers(page).subscribe({
+      next: (users: UsersResponseFront) => {
+        if (users) {
+          // Append current page results
+          this.results = [...this.results, ...users.results];
+          // If there is a next page, recursively fetch the next page
+          if (users.next) {
+            const nextPage = this.getPageNumberFromUrl(users.next);
+            this.fetchAllUsers(nextPage); // Recursive call to fetch the next page
+          } else {
+            // All pages are fetched, you can log or do something with the results
+            // If needed, filter users by role here
+            const medecins = this.results.filter(user => user.role === 'medecin');
+            this.infer = this.results.filter(user => user.role === 'infermier');
+            this.radio = this.results.filter(user => user.role === 'radiologue');
+            this.pat = this.results.filter(user => user.role === 'patient');
+            this.medcins  =medecins
+          }
+        } else {
+          console.log('No users found or an error occurred.');
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
       }
     });
+  }
+
+  // Helper method to extract the page number from the "next" URL
+  getPageNumberFromUrl(url: string): number {
+    const match = url.match(/page=(\d+)/);  // Extract the page number from the URL
+    return match ? parseInt(match[1], 10) : 1;  // Return the page number or 1 if not found
   }
 
   // Method to toggle the sidebar
@@ -48,12 +84,12 @@ export class DashboardComponent implements OnInit {
 
   // Filtered and sorted users based on search and criteria
   get filteredAndSortedUsers() {
-    let filtered = this.users;
+    let filtered = this.results;
 
     // Filter by search query (first name and last name)
     if (this.searchQuery.trim()) {
       filtered = filtered.filter((user) =>
-        `${user.nom || ''} ${user.prenom || ''}`
+        `${user.username || ''} ${user.username || ''}`
           .toLowerCase()
           .includes(this.searchQuery.toLowerCase())
       );
@@ -68,15 +104,15 @@ export class DashboardComponent implements OnInit {
 
     // Sort based on selected criteria
     if (this.sortCriteria === 'medecin') {
-      filtered = filtered.sort((a, b) => a.nom.localeCompare(b.nom));
+      filtered = filtered.sort((a, b) => a.username.localeCompare(b.username));
     } else if (this.sortCriteria === 'radiologue') {
       filtered = filtered.sort((a, b) => a.role.localeCompare(b.role));
     } else if (this.sortCriteria === 'infirmier') {
-      filtered = filtered.sort((a, b) => a.nom.localeCompare(b.nom));
+      filtered = filtered.sort((a, b) => a.username.localeCompare(b.username));
     } else if (this.sortCriteria === 'admin') {
-      filtered = filtered.sort((a, b) => a.nom.localeCompare(b.nom));
+      filtered = filtered.sort((a, b) => a.username.localeCompare(b.username));
     } else if (this.sortCriteria === 'patient') {
-      filtered = filtered.sort((a, b) => a.nom.localeCompare(b.nom));
+      filtered = filtered.sort((a, b) => a.username.localeCompare(b.username));
     }
 
     // Pagination
@@ -87,7 +123,7 @@ export class DashboardComponent implements OnInit {
   }
 
   get totalPages() {
-    return Math.ceil(this.users.length / this.itemsPerPage);
+    return Math.ceil(this.results.length / this.itemsPerPage);
   }
 
   // Handle pagination
@@ -117,7 +153,7 @@ export class DashboardComponent implements OnInit {
 
   // Delete a user from the dynamic list
   deleteUser(id: number) {
-    this.users = this.users.filter((user) => user.id !== id);
+    this.results = this.results.filter((user) => user.id !== id);
   }
 
   onConfirmDelete(isConfirmed: boolean): void {
