@@ -1,0 +1,64 @@
+
+  
+        <div class="relative overflow-x-auto sm:rounded-lg bg-white p-2 ">
+          <div class="px-4 py-3 flex items-center">
+            <div class="flex space-x-1 items-center">
+              <div class="font-bold text-xl">Consultations</div>
+              <div class="text-[#6941C6] bg-[#E9EAEB] p-2 rounded-3xl w-fit font-medium">
+                {{ consultations?.length }} consultation
+              </div>
+            </div>
+            <div>
+
+            </div>
+          </div>
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" class="px-6 py-3">Date</th>
+                <th scope="col" class="px-6 py-3 flex items-center space-x-2 cursor-pointer">
+                  <span>num of examens</span>
+                </th>
+                <th scope="col" class="px-6 py-3">Médecin</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3">Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cons of getUser()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer" (click)="toggleModalOpen(cons)">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" >
+                  <img src="/assets/pic.png" alt="User photo" class="inline w-8 h-8 rounded-full mr-2" />
+                  {{ cons.dateConsultation}}
+                </th>
+                <td class="px-6 py-4 flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full"></span>
+                  <span>{{ cons.examens.length }}</span>
+                </td>
+                <td class="px-6 py-4">{{ cons.medecin_name }}</td>
+                <td class="px-6 py-4">{{ cons.status }}</td>
+                <td class="px-6 py-4 text-center items-center">
+                  <div class="flex items-center space-x-1">
+                    <div class="cursor-pointer"><img src="/assets/edit.png" width="40px" height="12px" /></div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+  
+          <!-- Pagination -->
+          <div class="flex flex-wrap justify-between items-center pt-2 w-full">
+            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md" [disabled]="currentPage === 1" [ngClass]="currentPage == 1 ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="previousPage()">Précédent</button>
+            <p class="text-gray-600">Page {{ currentPage }} sur {{ totalPages }}</p>
+            <button class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md" [disabled]="currentPage === totalPages" [ngClass]="currentPage == totalPages ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="nextPage()">Suivant</button>
+          </div>
+        </div>
+
+  
+    <!-- Modal -->
+    <div *ngIf="isModalOpen2 && consultation " class="pt-20" >
+      <div>
+        <app-consultation-modal [isModalOpen]="isModalOpen2" [consultation]="consultation" />
+      </div>
+
+    </div>
+  
