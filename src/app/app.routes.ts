@@ -19,6 +19,7 @@ import { PatientComponent } from './pages/patient/patient.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AddPatientComponent } from './pages/add-patient/add-patient.component';
 import { PatientDetaileComponent } from './pages/patient-detaile/patient-detaile.component';
+import { AddConsultationComponent } from './pages/add-consultation/add-consultation.component';
 
 export const routes: Routes = [
   // Public routes
@@ -96,9 +97,16 @@ export const routes: Routes = [
     data : {role : 'medecin'}
   },
   {
+    path: 'medecin/:id/patients/addConsultation/:patientID',
+    component: AddConsultationComponent,
+    canActivate: [AuthGuard],
+    data : {role : 'medecin'}
+  },
+  {
     path: 'patient/:id',
     component: PatientComponent,
-  },
+  }
+
 ];
 
 @NgModule({

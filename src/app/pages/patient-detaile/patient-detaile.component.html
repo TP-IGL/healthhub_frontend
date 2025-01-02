@@ -28,15 +28,21 @@
         </div>
         <div class="flex justify-between pt-8 items-center">
           <div class="font-semibold text-xl">Gestion des Consultations</div>
+          <div class="bg-[#6941C6] rounded-lg py-2 px-3 text-white hover:bg-[#704fbe] cursor-pointer " (click)="goToAddConsultation()">
+            <button >ajouter consultation</button>
+          </div>
         </div>
   
         <div class="relative overflow-x-auto sm:rounded-lg bg-white p-2 ">
-          <div class="px-4 py-3 flex items-center space-x-1">
-            <div>
+          <div class="px-4 py-3 flex items-center">
+            <div class="flex space-x-1 items-center">
               <div class="font-bold text-xl">Consultations</div>
+              <div class="text-[#6941C6] bg-[#E9EAEB] p-2 rounded-3xl w-fit font-medium">
+                {{ consultations.length }} consultation
+              </div>
             </div>
-            <div class="text-[#6941C6] bg-[#E9EAEB] p-2 rounded-3xl w-fit font-medium">
-              {{ consultations.length }} consultation
+            <div>
+
             </div>
           </div>
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -44,7 +50,7 @@
               <tr>
                 <th scope="col" class="px-6 py-3">Date</th>
                 <th scope="col" class="px-6 py-3 flex items-center space-x-2 cursor-pointer">
-                  <span>NSS</span>
+                  <span>num of examens</span>
                 </th>
                 <th scope="col" class="px-6 py-3">Médecin</th>
                 <th scope="col" class="px-6 py-3">Status</th>
@@ -52,16 +58,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let cons of consultations" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              <tr *ngFor="let cons of getUser()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer" (click)="toggleModalOpen(cons)">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" >
                   <img src="/assets/pic.png" alt="User photo" class="inline w-8 h-8 rounded-full mr-2" />
-                  {{ cons.date }}
+                  {{ cons.dateConsultation}}
                 </th>
                 <td class="px-6 py-4 flex items-center space-x-2">
                   <span class="w-3 h-3 rounded-full"></span>
-                  <span>{{ cons.nss }}</span>
+                  <span>{{ cons.examens.length }}</span>
                 </td>
-                <td class="px-6 py-4">{{ cons.medicine }}</td>
+                <td class="px-6 py-4">{{ cons.medecin_name }}</td>
                 <td class="px-6 py-4">{{ cons.status }}</td>
                 <td class="px-6 py-4 text-center items-center">
                   <div class="flex items-center space-x-1">
@@ -83,8 +89,11 @@
     </div>
   
     <!-- Modal -->
-    <div *ngIf="isModalOpen2">
-      <app-consultation-modal [isModalOpen]="isModalOpen2" [consultation]="consultation" />
+    <div *ngIf="isModalOpen2" class="pt-20" >
+      <div>
+        <app-consultation-modal [isModalOpen]="isModalOpen2" [consultation]="consultation" />
+      </div>
+
     </div>
   </div>
   

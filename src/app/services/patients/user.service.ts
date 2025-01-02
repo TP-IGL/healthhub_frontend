@@ -28,7 +28,7 @@ export class UserService {
       }
     }
 
-    if (authState?.isAuthenticated && authState?.role === 'admin' && authState?.token) {
+    if (authState?.isAuthenticated && authState?.token) {
       const httpHeader = new HttpHeaders({
         'Authorization': `Token ${authState.token}`,
         'Content-Type': 'application/json'

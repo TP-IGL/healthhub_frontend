@@ -1,0 +1,111 @@
+<div class="min-h-screen flex w-full bg-gray-100">
+    <!-- Sidebar -->
+    <app-side-bar-medecin
+      [activeItem]="activeItem"
+      (isSidebarOpenR)="toggleSidebar($event)"
+      (menuSelected)="onMenuSelect($event)"
+      class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+      [ngClass]="{
+        '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+        'translate-x-0': isSidebarOpen
+      }">
+    </app-side-bar-medecin>
+  
+    <!-- Content Area -->
+    <div class="min-h-screen w-full bg-slate-100 py-10 px-6 sm:px-12 lg:px-20"
+         [ngClass]="{
+           'max-sm:pl-[6rem] sm:pl-[7rem] lg:pl-[12rem]': !isSidebarOpen,
+           'ml-0 sm:ml-[250px]': isSidebarOpen
+         }">
+      <h1 class="text-2xl font-bold mb-6">Ajouter une Consultation</h1>
+  
+      <!-- Consultation Form -->
+      <div class="bg-white rounded-lg p-6 mb-6"  *ngIf="!isConsultationSubmitted">
+        <h2 class="text-lg font-semibold mb-4">Détails de la Consultation</h2>
+        <form [formGroup]="consultationForm" (ngSubmit)="onSubmit()">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700">Date Consultation</label>
+              <input type="date" formControlName="dateConsultation" class="w-full border rounded-lg p-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Diagnostic</label>
+              <input type="text" formControlName="diagnostic" class="w-full border rounded-lg p-2">
+            </div>
+            <div>
+              <label class="block text-gray-700">Résumé</label>
+              <textarea formControlName="resume" class="w-full border rounded-lg p-2" rows="3"></textarea>
+            </div>
+            <div>
+              <label class="block text-gray-700">Statut</label>
+              <select formControlName="statut" class="w-full border rounded-lg p-2">
+                <option value="planifie">Planifié</option>
+                <option value="en_cours">En Cours</option>
+                <option value="termine">Terminé</option>
+                <option value="annule">Annulé</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="bg-[#5932EA] text-white py-2 px-4 rounded mt-4">
+            Submit Consultation
+          </button>
+        </form>
+      </div>
+      <div class="bg-white rounded-lg p-6 mb-6"  *ngIf="isConsultationSubmitted && consultation">
+        <h2 class="text-lg font-semibold mb-4">Détails de la Consultation</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="border p-4 rounded flex items-center space-x-1">
+                <div class="w-4 h-4 bg-red-500 rounded-full mr-1"></div>
+                <div><strong>consultation id:</strong>{{consultation.consultationID}}</div>
+          </div>
+          <div class="border p-4 rounded flex items-center space-x-1">
+            <div class="w-4 h-4 bg-green-500 rounded-full mr-1"></div>
+            <div><strong>consultation date:</strong>{{consultation.dateConsultation}}</div>
+      </div>
+      <div class="border p-4 rounded flex items-center space-x-1">
+        <div class="w-4 h-4 bg-yellow-500 rounded-full mr-1"></div>
+        <div><strong>consultation resul:</strong>{{consultation.resume}}</div>
+  </div>
+      </div>
+      </div>
+  
+      <!-- Ordonnances -->
+      <div class="bg-white rounded-lg p-6 mt-6 mb-6" *ngIf="isConsultationSubmitted">
+        <h2 class="text-lg font-semibold mb-4">Ordonnances</h2>
+        <div>
+          <button class="bg-[#5932EA] text-white py-2 px-4 rounded mb-4" (click)="toggleAddOrd()">
+            Ajouter Ordonnance
+          </button>
+          <div class="space-y-4" *ngFor="let med of medications">
+            <div class="border p-4 rounded flex items-center space-x-1">
+              <div class="w-4 h-4 bg-red-500 rounded-full mr-1"></div>
+              <div><strong>Medication:</strong> {{med.nom}} for {{med.duree}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Examens -->
+      <div class="bg-white rounded-lg p-6 mt-6 mb-6"  *ngIf="isConsultationSubmitted">
+        <h2 class="text-lg font-semibold mb-4">Examens</h2>
+        <button class="bg-[#5932EA] text-white py-2 px-4 rounded mb-4" (click)="toggleExamination()">
+          Ajouter Examen
+        </button>
+        <div class="space-y-4" *ngFor="let exm of exams">
+            <div class="border p-4 rounded flex items-center space-x-1">
+              <div [ngClass]="{'w-4 h-4 bg-red-500 rounded-full mr-1': exm.state == 'urgent' || exm.state=='tres_urgent' ,'w-4 h-4 bg-yellow-500 rounded-full mr-1' : exm.state == 'normal'}"></div>
+              <div>demande de l'exame :<strong> {{exm.type}} </strong></div>
+            </div>
+          </div>
+      </div>
+    </div>
+  
+    <!-- Ordonnance Form -->
+    <div *ngIf="addOrd && consultation">
+      <app-ordanance-form (medicationsAdded)="handleMedications($event)" [addOrd]="addOrd" [consultationId]="consultation.consultationID"></app-ordanance-form>
+    </div>
+    <div *ngIf="addEaxmination && consultation" >
+        <app-examination-form [addExamination]="addEaxmination" (examinationsList)="getExams($event)" [consultationId]="consultation.consultationID"></app-examination-form>
+    </div>
+  </div>
+  

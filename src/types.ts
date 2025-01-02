@@ -368,3 +368,40 @@ export interface PatientCreate {
     nss: string ; 
     status: string ; 
   }
+
+  // medication Input 
+  export interface MedicationInput {
+    nom : string ; 
+    type : "comprime"|"sirop"|"injection"|"pommade"|"autre" ; 
+    description : string ; 
+    dosage : "faible" |"moyen" | "fort"  ; 
+    duree : string ; 
+    frequence : string ; 
+    instructions : string ;
+  }
+
+  // ordanance 
+  export interface prescriptionsResponse {
+    ordonnanceID : string ; 
+    valid : boolean ; 
+    dateCreation : string ; 
+    dateExpiration : string | null ; 
+    medicaments : medicaments2[]
+  }
+  export interface MedicamentsResposne {
+    ordonnanceMedicamentID : string ; 
+    medicament : medicaments3
+  }
+  export interface medicaments3 {
+    medicamentID : string
+    nom : string ; 
+    type : string ; 
+    description : string ;
+  }
+  interface medicaments2 {
+    medicament : MedicamentsResposne ; 
+    duree : string ; 
+    dosage : string ; 
+    frequence : string ; 
+    instructions : string ;
+  }

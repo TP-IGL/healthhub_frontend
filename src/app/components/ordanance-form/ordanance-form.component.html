@@ -1,0 +1,88 @@
+<div
+  id="ordonnance-modal"
+  *ngIf="addOrd"
+  class="fixed inset-0 z-50 flex items-center max-sm:pt-[20rem] pt-40 pb-10 overflow-y-auto justify-center bg-black bg-opacity-50"
+>
+  <div class="bg-white rounded-lg shadow-lg max-w-md md:max-w-2xl w-full p-6">
+    <h3 class="text-xl font-semibold mb-4">Add Medications</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+        <input
+          type="text"
+          [(ngModel)]="newMedication.nom"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Type</label>
+        <select
+          [(ngModel)]="newMedication.type"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        >
+          <option value="comprime">Comprime</option>
+          <option value="sirop">Sirop</option>
+          <option value="injection">Injection</option>
+          <option value="pommade">Pommade</option>
+          <option value="autre">Autre</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+        <textarea
+          [(ngModel)]="newMedication.description"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        ></textarea>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dosage</label>
+        <select
+          [(ngModel)]="newMedication.dosage"
+          class="w-full border rounded-lg p-2"
+        >
+          <option value="faible">Faible</option>
+          <option value="moyen">Moyen</option>
+          <option value="fort">Fort</option>
+        </select>
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Duration</label>
+        <input
+          type="text"
+          [(ngModel)]="newMedication.duree"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        />
+      </div>
+      <div>
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Frequency</label>
+        <input
+          type="text"
+          [(ngModel)]="newMedication.frequence"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        />
+      </div>
+      <div class="md:col-span-2">
+        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Instructions</label>
+        <textarea
+          [(ngModel)]="newMedication.instructions"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+        ></textarea>
+      </div>
+    </div>
+
+    <div class="flex justify-between mt-6">
+      <button
+        (click)="addMedication()"
+        class="bg-blue-500 text-white px-4 py-2 rounded-lg"
+      >
+        Add Medication
+      </button>
+      <button
+        (click)="saveMedications()"
+        class="bg-green-500 text-white px-4 py-2 rounded-lg"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>

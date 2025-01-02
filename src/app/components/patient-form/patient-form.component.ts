@@ -83,11 +83,6 @@ export class PatientFormComponent {
   onSubmit() {
     if (this.userForm.valid) {
       const formData = { ...this.userForm.value }; // Clone the form data
-      // Append the time part to the dateNaissance field
-      if (formData.dateNaissance) {
-        formData.dateNaissance = formData.dateNaissance + "T22:49:32.078Z";
-      }
-      console.log(formData);
   
       // Call the service to create the patient
       this.CreateUserService.createPatient(formData).subscribe(response => {

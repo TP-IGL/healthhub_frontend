@@ -14,12 +14,12 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router, private store: Store<{auth : AuthState}>) {}
 
   login(username: string, password: string) {
-    this.http.post<{ token: string , user : { username : string , id : string , email : string , role : string , } }>(this.apiURL, { username, password })
+    this.http.post<{ token: string , user : { username : string , id : string , email : string , role : string ,centre_hospitalier_id : string } }>(this.apiURL, { username, password })
       .subscribe({
         next: (response) => {
           console.log(response.user)
           if (response.token) {
-            this.store.dispatch(loginSuccess({ token: response.token , username : response.user.username , id : response.user.id , email:response.user.email , role:response.user.role})); // Dispatch login success action
+            this.store.dispatch(loginSuccess({ token: response.token , username : response.user.username , id : response.user.id , email:response.user.email , role:response.user.role , centre_hospitalier_id:response.user.centre_hospitalier_id})); // Dispatch login success action
             this.saveToken(response.token)
             this.redirectBasedOnRole(response.user.role , response.user.id)
         

@@ -6,11 +6,12 @@ import { MedCardsComponent } from "../../components/med-cards/med-cards.componen
 import { SideBarMedecinComponent } from "../../components/side-bar-medecin/side-bar-medecin.component";
 import { AuthState } from '../../services/auth/auth.reducer';
 import { ConsultationModalComponent } from "../../components/consultation-modal/consultation-modal.component";
-import { Consultations } from '../../../types';
+import { Consultations, DossierMedicalDetail } from '../../../types';
+import { MedecinService } from '../../services/medecin/medecin.service';
 
 @Component({
   selector: 'app-patient-detaile',
-  imports: [CommonModule, MedCardsComponent, SideBarMedecinComponent, ConsultationModalComponent],
+  imports: [CommonModule, SideBarMedecinComponent, ConsultationModalComponent],
   templateUrl: './patient-detaile.component.html',
   styleUrl: './patient-detaile.component.css'
 })
@@ -19,10 +20,13 @@ export class PatientDetaileComponent {
 
   authState : AuthState| null = null ; 
   medName : string | null = "ahmed" ; 
+  patientId : string | null = null 
   private medID : string | null = null ; 
-  constructor(private router:Router ) {
+  isModalOpen2 = false ; 
+  consultation : Consultations |null = null ;
+  consultations : Consultations[]  = []
+  constructor(private router:Router, private route: ActivatedRoute  , private medServices : MedecinService) {
     const jsonData = localStorage.getItem('authState');
-
     if (jsonData) {
       try {
         this.authState = JSON.parse(jsonData);
@@ -42,31 +46,17 @@ export class PatientDetaileComponent {
   itemsPerPage: number = 3; 
   currentPage: number = 1;
   isSidebarOpen  : boolean = false 
+ 
+
   ngOnInit(): void {
-    // Retrieve the 'nss' parameter from the route
+    this.patientId = this.route.snapshot.paramMap.get('patientID');
+    if (this.patientId) {
+      this.medServices.getDossierMedicalDetail("nss" , this.patientId).subscribe((results : DossierMedicalDetail)=>{this.consultations = results.consultations })
+    }
+    
   }
 
-    // Example static data for consultations
-    consultations = [
-      {
-        date: '2024-12-25T10:30:00Z',
-        medicine: 'Paracetamol 500mg',
-        nss: '1234567890',
-        status: 'Completed'
-      },
-      {
-        date: '2024-12-26T14:00:00Z',
-        medicine: 'Ibuprofen 200mg',
-        nss: '0987654321',
-        status: 'Pending'
-      },
-      {
-        date: '2024-12-27T16:45:00Z',
-        medicine: 'Amoxicillin 250mg',
-        nss: '1122334455',
-        status: 'Cancelled'
-      }
-    ];
+
 
     get totalPages(): number {
       return Math.ceil(this.consultations.length / this.itemsPerPage);
@@ -128,11 +118,12 @@ export class PatientDetaileComponent {
           console.warn('Menu inconnu');
       }
     }
-    isModalOpen2 = false ; 
-    consultation : Consultations |null = null ;
-    toggleModalOpen(cons : Consultations) {
+
+    toggleModalOpen(cons : Consultations) : void {
       this.isModalOpen2 = !this.isModalOpen2
       this.consultation = cons
-      console.log(this.isModalOpen2)
+    }
+    goToAddConsultation() : void {
+      this.router.navigate([`/medecin/${this.medID}/patients/addConsultation/${this.patientId}`])
     }
 }

@@ -9,16 +9,17 @@ import Chart from 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Platform } from '@angular/cdk/platform';
 import { ChartData, ChartOptions, ChartType } from 'chart.js';
+import { Router } from '@angular/router';
 Chart.register(ChartDataLabels);
 @Component({
   selector: 'app-patient',
-  imports: [MatIconModule, CommonModule, SideBarComponent, FormsModule, ModaldialogComponent,],
+  imports: [MatIconModule, CommonModule, SideBarComponent, FormsModule],
  
   templateUrl: './patient.component.html',
   styleUrl: './patient.component.css'
 })
 export class PatientComponent implements AfterViewInit {
-
+  constructor(private router : Router , priva) {}
   /*******************************************HEADERR********************************* */
   patient: any = {
     photo: 'assets/patientt.svg', // Chemin de l'image
@@ -87,7 +88,6 @@ export class PatientComponent implements AfterViewInit {
   /*constructor(private platform: Platform) {
     Chart.register(ChartDataLabels); // Enregistrer le plugin des données
   }*/
-    constructor(private platform: Platform) {}
    
     ngAfterViewInit() {
       //if (isPlatformBrowser(this.platform)) {

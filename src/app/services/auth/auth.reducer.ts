@@ -9,6 +9,7 @@ export interface AuthState {
   role : string | null ; 
   id : string | null ; 
   email : string | null ; 
+  centre_hospitalier_id : string | null ; 
 }
 
 // Helper function to safely access localStorage
@@ -30,11 +31,12 @@ export const initialState: AuthState = {
   role: savedState.role || null,
   id: savedState.id || null,
   email: savedState.email || null,
+  centre_hospitalier_id : savedState.centre_hospitalier_id|| null
 };
 
 export const authReducer = createReducer(
   initialState,
-  on(loginSuccess, (state, { token, username, role, id, email }) => {
+  on(loginSuccess, (state, { token, username, role, id, email , centre_hospitalier_id }) => {
     const newState = {
       ...state,
       token,
@@ -42,8 +44,10 @@ export const authReducer = createReducer(
       role,
       id,
       email,
+      centre_hospitalier_id , 
       isAuthenticated: true,
       error: null,
+  
     };
     if (typeof localStorage !== 'undefined') {
       localStorage.setItem('authState', JSON.stringify(newState));

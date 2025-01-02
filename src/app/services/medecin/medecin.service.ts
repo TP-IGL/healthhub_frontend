@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthState } from '../auth/auth.reducer';
-import { ConsultationCreateUpdate, Consultations, DossierMedicalDetail, Examens, ExaminationCreate, LaborantinListResponse, OrdonnanceCreate, OrdonnanceMedicamentCreate, OrdonnancesListResponse, PatientsListResponse, RadiologueListResponse } from '../../../types';
-import { Observable } from 'rxjs';
+import { ConsultationCreateUpdate, Consultations, DossierMedicalDetail, Examens, ExaminationCreate, LaborantinListResponse, MedicationInput, OrdonnanceCreate, OrdonnanceMedicamentCreate, OrdonnancesListResponse, PatientsListResponse, prescriptionsResponse, RadiologueListResponse } from '../../../types';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class MedecinService {
   private examURL: string = 'http://127.0.0.1:8000/api/medecin/examinations/' ; 
   private laborantinURL: string = 'http://127.0.0.1:8000/api/medecin/hospital/' 
   private docURL :string = 'http://127.0.0.1:8000/api/medecin/doctors/'
-  private searchURL : string = '/medecin/medecin/patients/search/'
+  private searchURL : string = 'http://127.0.0.1:8000/api/medecin/medecin/patients/search/'
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders | null {
@@ -41,18 +41,19 @@ export class MedecinService {
 
   // Create consultation
   createConsultation(data: {
-    patient_id: string;
+    nss: string ;
     diagnostic: string;
     resume: string;
     status: string;
-  }): Observable<ConsultationCreateUpdate> {
-    const headers = new HttpHeaders({
-      'accept': 'application/json',
-      'Authorization': 'Token 85fa26aa1898ecb548b7758a4f5c6a86f8fb168e',
-      'Content-Type': 'application/json',
-    });
+  }): Observable<ConsultationCreateUpdate | null> {
+    const headers = this.getAuthHeaders()
+    if (headers) {
+      return this.http.post<ConsultationCreateUpdate>(this.medURL, data, { headers });
+    } else {
+      return of(null)
+    }
 
-    return this.http.post<ConsultationCreateUpdate>(this.medURL, data, { headers });
+
   }
 
   // Fetch consultation details by ID
@@ -102,10 +103,9 @@ export class MedecinService {
     return this.http.post<ExaminationCreate>(url, data, { headers });
   }
     // Create a new prescription for a consultation
-    createPrescription(consultationId: string, data: {
-      dateExpiration: string;
-      medicaments: OrdonnanceMedicamentCreate[];
-    }): Observable<OrdonnanceCreate> {
+    createPrescription(consultationId: string,
+      medicaments: MedicationInput[]
+    ): Observable<prescriptionsResponse> {
       const headers = this.getAuthHeaders();
       if (!headers) {
         throw new Error('Authorization failed');
@@ -113,7 +113,7 @@ export class MedecinService {
   
       const url = `${this.medURL}${consultationId}/prescriptions/`;
   
-      return this.http.post<OrdonnanceCreate>(url, data, { headers });
+      return this.http.post<prescriptionsResponse>(url, {"medications" : medicaments}, { headers });
     }
 
       // List all prescriptions for a consultation
@@ -184,7 +184,7 @@ export class MedecinService {
       throw new Error('Authorization failed');
     } 
 
-    const url = `${this.searchURL}/&type${type}/&${id}/`;
+    const url = `${this.searchURL}${type}/${id}/`;
 
     return this.http.get< DossierMedicalDetail  >(url, { headers });
   }
