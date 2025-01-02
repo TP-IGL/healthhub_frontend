@@ -20,6 +20,11 @@ import { AuthGuard } from './guards/auth.guard';
 import { AddPatientComponent } from './pages/add-patient/add-patient.component';
 import { PatientDetaileComponent } from './pages/patient-detaile/patient-detaile.component';
 import { AddConsultationComponent } from './pages/add-consultation/add-consultation.component';
+import { RadiologueComponent } from './pages/radiologue/radiologue.component';
+import { ExamensComponent } from './pages/examens/examens.component';
+import { ExamenDetailsComponent } from './pages/examen-details/examen-details.component';
+import { LaborantinComponent } from './pages/laborantin/laborantin.component';
+import { ExamslabDetailsComponent } from './pages/examslab-details/examslab-details.component';
 
 export const routes: Routes = [
   // Public routes
@@ -105,7 +110,36 @@ export const routes: Routes = [
   {
     path: 'patient/:id',
     component: PatientComponent,
-  }
+    canActivate: [AuthGuard],
+    data : {role : 'patient'}
+  } , 
+  {
+    path : 'radiologue/:id' , 
+    component : RadiologueComponent ,
+    canActivate: [AuthGuard],
+    data : {role : 'radiologue'}
+  } , 
+  {
+    path : "radiologue/:id/examens" , component : ExamensComponent , 
+    canActivate: [AuthGuard],
+    data : {role : 'radiologue'}
+  },
+  {
+    path: 'radiologue/:id/examens/:ExamenId/examensdetails', component: ExamenDetailsComponent ,
+    canActivate: [AuthGuard],
+    data : {role : 'radiologue'}
+ },
+ {
+  path: 'laborantin/:id', component: LaborantinComponent ,
+  canActivate: [AuthGuard],
+  data : {role : 'laborantin'}
+},
+{
+  path: 'laborantin/:labid/exams/:id/:nss', component: ExamslabDetailsComponent ,
+  canActivate: [AuthGuard],
+  data : {role : 'laborantin'}
+},
+
 
 ];
 

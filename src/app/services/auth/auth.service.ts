@@ -43,8 +43,10 @@ export class AuthService {
       this.router.navigate([`/medecin/${id}/patients`]);
     } else if (role === 'patient') {
       this.router.navigate([`/patient/${id}`]);
-    } else {
-      this.router.navigate(['/']); // Default fallback
+    } else if (role == 'radiologue'){
+      this.router.navigate([`radiologue/${id}`]); 
+    } else if (role == 'laborantin') {
+      this.router.navigate([`laborantin/${id}`])
     }
   }
   getToken(): string | null {

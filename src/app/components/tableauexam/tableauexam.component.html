@@ -1,0 +1,49 @@
+<div   class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        
+        <th scope="col" class="px-6 py-3">Nom du Patient</th>
+        
+        <th scope="col" class="px-6 py-3">Date De demande</th>
+        <th scope="col" class="px-6 py-3">Statut</th>
+        <th scope="col" class="px-6 py-3">Urgnece</th>
+        <th scope="col" class="px-6 py-3">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of paginatedAppointments(); let i = index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+        
+        <td class="px-6 py-4">{{ appointment.patient }}</td>
+        <td class="px-6 py-4">{{ appointment.date }} </td>
+        <td class="px-6 py-4">
+          <div class="flex items-center">
+            <div [ngClass]="{'bg-green-500': appointment.statut === 'Terminé', 'bg-red-500': appointment.statut === 'annulé', 'bg-[#D7901E]': appointment.statut === 'Non traité', 'bg-[#175FB2]': appointment.statut === 'En cours'}" class="h-2.5 w-2.5 rounded-full me-2"></div> 
+            {{ appointment.statut }}
+          </div>
+        </td>
+        
+        <td class="px-6 py-4">
+          <div class="flex items-center">
+            <div [ngClass]="{'bg-red-500': appointment.Urgence === 'trés urgent', 'bg-[#D7901E]': appointment.Urgence === 'urgent', 'bg-[#175FB2]': appointment.Urgence === 'normal'}" class="h-2.5 w-2.5 rounded-full me-2"></div> 
+            {{ appointment.Urgence }}
+          </div>
+        </td>
+        
+        <td class="px-6 py-4 flex gap-2">
+          <button (click)="onDetailsClick(appointment.id)" class="text-[#175FB2]" >Voir plus de détails</button>
+        
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <!-- Pagination -->
+  <div class="pagination flex justify-between items-center">
+    <button (click)="previousPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Précédent</button>
+    <span class="px-4 py-2">Page {{ currentPage }} / {{ totalPages() }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded">Suivant</button>
+  </div>
+  
+ 
+</div>

@@ -1,0 +1,165 @@
+<div class="flex flex-col sm:flex-row min-h-screen bg-gray-100 overflow-hidden">
+    <!-- Sidebar -->
+   <app-side-bar-radiologue 
+   [activeItem]="activeItem"
+   [radiologuename]="radiologuename"
+    (isSidebarOpenR)="toggleSidebar($event)" 
+    (menuSelected)="onMenuSelect($event)"
+   class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+   [ngClass]="{
+     '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+     'translate-x-0': isSidebarOpen
+   }">
+
+
+   </app-side-bar-radiologue>
+  <main 
+    class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+    [ngClass]="{
+      'ml-0 sm:ml-20': isSidebarOpen,
+      'ml-0 sm:ml-[250px]': !isSidebarOpen
+    }">
+    <nav class="flex flex-wrap justify-between items-center p-2 rounded-lg bg-white">
+      <div class="text-lg font-medium flex  flex-col  justify-start space-x-2">
+        <p class="text-sm text-[#707EAE]">J'espère que vous êtes en pleine forme, prêt à relever de nouveaux défis aujourd'hui !</p>
+        <span class="text-[#2B3674]">Bienvenue, <span class="text-[#6A5BFF] font-semibold text-lg">{{ userName }}!</span></span> 
+      </div>
+    </nav>
+    <!--contenu principal-->
+    <div class="bg-white p-4 sm:p-6 rounded-lg">
+      <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
+
+        <!--Element1-->
+        <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          
+          <div>
+            <h3 class="text-lg text-[#A3AED0]">Images Téléchargés</h3>
+            <p class="text-[#1B2559] font-semibold text-lg">200</p>
+          </div>
+          <div class=" rounded-full mb-4  flex items-center justify-center">
+            <img src="assets/telechergementradio.jpg" alt="">
+           </div>
+        </div>
+
+          <!--Element2-->
+          <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          
+            <div>
+              <h3 class="text-lg text-[#A3AED0]">Demandes en Cours</h3>
+              <p class="text-[#1B2559] font-semibold text-lg">321</p>
+            </div>
+            <div class=" rounded-full w-16 h-16 mb-4  flex items-center bg-gradient-to-r from-[#4318FF] to-[#868CFF] justify-center">
+              <img src="assets/demandesencours.svg" alt="">
+             </div>
+          </div>
+
+          <!--Element3-->
+          <div class="flex items-center justify-center border-b sm:border-b-0 sm:border-r p-4 space-x-5">
+          
+            <div>
+              <h3 class="text-lg text-[#A3AED0]">Examens Términés</h3>
+              <p class="text-[#1B2559] font-semibold text-lg">8</p>
+            </div>
+            <div class=" rounded-full w-16 h-16 mb-4  flex items-center justify-center">
+              <img src="assets/telechargement.svg" alt="">
+             </div>
+          </div>
+      </div>
+      
+
+      <!--Analyse par mois &&& Repartition des tests-->
+      <div class="flex flex-col md:flex-row justify-between items-start space-y-6 md:space-y-0 md:space-x-6 mt-8 rounded-md">
+        
+        <!--Colonnes des imageries par mois -->
+        <div class="w-full md:w-1/2 p-4  rounded-lg">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <p class="text-lg text-[#A3AED0]">Progression des Analyses et Images par Mois</p>
+              <p class="text-[#1B2559] font-semibold text-lg">8</p>  
+            </div>
+            <div class="rounded-full w-16 h-16 flex items-center justify-center ml-6 mb-14">
+              <img src="assets/telechargement.svg" alt="">
+            </div>
+
+          </div> 
+          <div class="flex flex-wrap lg:flex-nowrap  justify-center gap-4">
+           
+            <div
+              *ngFor="let month of months; let i = index"
+              class="flex flex-col items-center flex-[1_1_8%] sm:flex-[1_1_20%] md:flex-[1_1_10%] border-dashed border-t-2 border-[#4318FF] max-w-[6%]"
+            >
+              <!-- Colonne d'un mois -->
+              <div
+                [ngClass]="{
+                  'bg-[#5932EA]': i === currentMonthIndex,
+                  'bg-gray-200': i !== currentMonthIndex
+                }"
+                class="h-24 sm:h-28 md:h-32 w-8 sm:w-8 md:w-8 rounded-lg"
+              ></div>
+              
+              <p class="text-xs sm:text-sm md:text-base text-center mt-2 text-[#1B2559]">
+                {{ month }}
+              </p>
+            </div>
+          </div>
+          
+
+        </div>
+
+      
+
+        <!--Donut graphique -->
+        <div class="w-full md:w-1/2 p-4 rounded-lg flex flex-col items-center">
+          <div class="text-lg font-md text-[#656575] text-center mb-4">
+            Répartition des tests médicaux
+          </div>
+          <app-donut-chart
+            class="flex justify-center items-center"
+            [data]="data"
+            [colors]="['#614DFF','#FFBE4D', '#FF4D4D', ]"
+            [height]="800"
+            [width]="800"
+            [label]="''"
+          ></app-donut-chart>
+          <div class="mt-4">
+            <div class="flex flex-col items-start space-y-2">
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 rounded-lg" style="background-color: #614DFF"></div>
+                <div class="flex items-center gap-14" >
+                  <span class="text-sm text-gray-700">IRM (MRI)</span>
+                  <span>{{data[0]}} %</span>
+               </div>
+                
+              </div>
+              <div class="flex items-center gap-2">
+                <div class="w-4 h-4 rounded-lg" style="background-color: #FFBE4D"></div>
+                <div class="flex items-center gap-9" >
+                   <span class="text-sm text-gray-700">Radiographie</span>
+                   <span>{{data[1]}} %</span>
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 rounded-lg" style="background-color: #FF4D4D"></div>
+                <div class="flex items-center gap-24" >
+                  <span class="text-sm text-gray-700">ECG</span>
+                  <span>{{data[2]}} %</span>
+               </div>
+              
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      
+
+
+
+
+    </div>
+
+  </main>
+  
+  
+</div>

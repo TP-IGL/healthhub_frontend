@@ -196,7 +196,7 @@ export interface PatientCreate {
     status: 'en_cours' | 'termine' | 'valide';
     health_metrics : HealthMetrics[] ; 
   }
-  interface HealthMetrics {
+  export interface HealthMetrics {
     id : string ; 
     metric_type : 'temperature'| 'pression_arterielle'| 'glycemie' |'autre' ; 
     value : string ;
@@ -405,3 +405,43 @@ export interface PatientCreate {
     frequence : string ; 
     instructions : string ;
   }
+
+
+  // labs interfaces
+  export interface ExamRequired {
+    examenID : string  ; 
+    consultation : string ; 
+    patient : string ; 
+    patient_id : string ; 
+    type : string ; 
+    etat : string ; 
+    priorite : string ; 
+    doctor_details : string ; 
+    createdAt : string ; 
+    health_metrics : string ; 
+    nss : string 
+  } 
+
+  export interface ResultatLaboHistory {
+    resLaboID : string ; 
+    examenID : string ; 
+    examen_type : string ; 
+    resultat : string ; 
+    dateAnalyse : string ; 
+    status : "en_cours" | "termine" | "valide" ; 
+    health_metrics : HealthMetrics[]
+  }
+
+  export interface ResultatLaboCreate {
+    examen : string ;
+    resultat : string ; 
+    status : "en_cours" | "termine" | "valide" ; 
+    health_metrics : healthMetricsCreate[]
+  } 
+  export interface healthMetricsCreate {
+    metric_type : "pression_arterielle" | "glycemie" |"niveaux_cholesterol" | "autre" ; 
+    value : string ; 
+    unit : string
+  }
+
+

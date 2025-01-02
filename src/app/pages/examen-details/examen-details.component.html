@@ -1,0 +1,116 @@
+<div class="flex flex-col sm:flex-row min-h-screen bg-gradient-to-br from-blue-50 to-blue-100">
+  <!-- Sidebar -->
+  <app-side-bar-radiologue
+    [activeItem]="activeItem"
+    [radiologuename]="radiologuename"
+    (isSidebarOpenR)="toggleSidebar($event)"
+    (menuSelected)="onMenuSelect($event)"
+    class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300 bg-blue-900 text-white shadow-lg"
+    [ngClass]="{
+      '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+      'translate-x-0': isSidebarOpen
+    }">
+  </app-side-bar-radiologue>
+
+  <!-- Main content -->
+  <main
+    class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+    [ngClass]="{
+      'ml-0 sm:ml-20': isSidebarOpen,
+      'ml-0 sm:ml-[250px]': !isSidebarOpen
+    }">
+
+    <!-- Page Header -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <div class="flex items-center space-x-4">
+        <i class="fa-solid fa-file-medical text-blue-500 text-3xl"></i>
+        <div>
+          <h1 class="text-3xl font-extrabold text-gray-800">Détails de l'examen</h1>
+          <p class="text-gray-600 mt-1">Consultez et gérez les informations de cet examen.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exam Details -->
+    <div class="bg-white rounded-lg shadow p-6 space-y-4">
+      <h2 class="text-2xl font-bold text-blue-700 flex items-center">
+        <i class="fa-solid fa-info-circle mr-2"></i> Informations générales
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-800">
+        <p><strong>ID :</strong> {{ exam.id }}</p>
+        <p><strong>Nom :</strong> {{ exam.name }}</p>
+        <p><strong>Date :</strong> {{ exam.date }}</p>
+        <p><strong>Urgence :</strong> 
+          <span [ngClass]="{'text-red-500 font-semibold': exam.Urgence === 'Oui', 'text-gray-800': exam.Urgence === 'Non'}">
+            {{ exam.Urgence }}
+          </span>
+        </p>
+        <p><strong>Statut :</strong> {{ exam.statut }}</p>
+        <p><strong>Patient :</strong> {{ exam.patient }}</p>
+      </div>
+    </div>
+
+     <!-- Liste des descriptions -->
+  <div class="bg-white rounded-lg shadow p-6 space-y-4">
+    <h3 class="text-xl font-bold text-blue-700 flex items-center">
+      <i class="fa-solid fa-clipboard-list mr-2"></i> Descriptions associées
+    </h3>
+    <ul class="list-disc pl-5 text-gray-800 space-y-2">
+      <li *ngFor="let description of exam.description">
+        {{ description }}
+      </li>
+    </ul>
+  </div>
+
+
+    <!-- Results Section -->
+    <div *ngIf="exam.resultats.length > 0" class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-xl font-bold text-blue-700 flex items-center mb-4">
+        <i class="fa-solid fa-list-check mr-2"></i> Résultats
+      </h3>
+      <ul class="space-y-4">
+        <li *ngFor="let result of exam.resultats" class="p-4 border border-gray-200 rounded-lg bg-gray-50 hover:shadow-lg">
+          <div class="space-y-2">
+            <p class="font-semibold text-gray-800"><strong>Résultat :</strong> {{ result.resultat }}</p>
+            <p class="text-gray-600"><strong>Description associée :</strong> {{ result.description }}</p>
+            <button 
+              (click)="displayImage(result.image)" 
+              class="text-blue-500 hover:underline flex items-center">
+              <i class="fa-solid fa-eye mr-2"></i> Voir l'image
+            </button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Add Results -->
+    <div class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-2xl font-bold text-blue-700 flex items-center mb-4">
+        <i class="fa-solid fa-plus-circle mr-2"></i> Ajouter un résultat
+      </h3>
+      <div class="space-y-4">
+        <textarea
+          id="resultat"
+          class="w-full border border-gray-300 rounded-lg p-4 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          [(ngModel)]="resultat"
+          placeholder="Ajoutez le résultat ici..."></textarea>
+        <input
+          id="image"
+          type="file"
+          (change)="handleImageChange($event)"
+          class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <button
+          class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+          (click)="saveResult()">
+          Enregistrer
+        </button>
+      </div>
+    </div>
+
+    <!-- Image Preview -->
+    <div *ngIf="imagePreview" class="bg-white rounded-lg shadow p-6">
+      <h3 class="text-xl font-bold text-blue-700">Prévisualisation de l'image</h3>
+      <img [src]="imagePreview" alt="Image du résultat" class="mt-4 rounded-lg shadow-lg w-full max-w-md mx-auto" />
+    </div>
+  </main>
+</div>

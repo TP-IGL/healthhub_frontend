@@ -1,0 +1,66 @@
+<div
+  [class.w-64]="isSidebarOpen"
+  [class.w-20]="!isSidebarOpen"
+  class="bg-white flex flex-col transition-all duration-300 relative h-full shadow-md"
+>
+  <!-- Bouton pour basculer la sidebar -->
+  <button
+    class="absolute top-1/2 -right-4 transform -translate-y-1/2 bg-gray-300 text-white w-8 h-8 rounded-full flex items-center justify-center shadow-md"
+    (click)="toggleSidebar()"
+  >
+    <mat-icon>
+      {{ isSidebarOpen ? 'chevron_left' : 'chevron_right' }}
+    </mat-icon>
+  </button>
+
+  <!-- Profil du médecin (visible même si la sidebar est fermée) -->
+  <div class="p-4 flex items-center space-x-4 border-b mb-6" *ngIf="isSidebarOpen || !isSidebarOpen">
+    <img
+      src="assets/avatarmedecin.svg" 
+      alt="Profile"
+      class="w-fit  rounded-full"
+    />
+    <div class="flex flex-col justify-center">
+      <span class="text-lg font-normal text-[#000000]" *ngIf="isSidebarOpen">{{laboname}}</span>
+      <span class="text-lg font-normal text-[#757575]" *ngIf="isSidebarOpen">Laborantin</span>
+    </div>
+  </div>
+
+  <!-- Barre de recherche (visible même si la sidebar est fermée) -->
+  <div class="p-4 border-b flex items-center space-x-2" *ngIf="isSidebarOpen || !isSidebarOpen">
+    <mat-icon class="text-gray-400">search</mat-icon>
+    <input
+      *ngIf="isSidebarOpen"
+      type="text"
+      placeholder="Rechercher"
+      class="w-full outline-none bg-transparent"
+    />
+  </div>
+
+  <!-- Menu de navigation -->
+  <div class="flex flex-col mt-4 space-y-4 px-4 flex-grow">
+    <button
+      *ngFor="let item of menuItems"
+      (click)="selectMenu(item)"
+      [class.bg-[#5932EA]]="activeItem === item.name"
+      [class.text-white]="activeItem === item.name"
+      [class.text-black]="activeItem !== item.name"
+      class="flex items-center space-x-3 p-2 rounded-md hover:opacity-80 cursor-pointer"
+    >
+      <mat-icon [class.w-0]="!isSidebarOpen" [class.w-6]="isSidebarOpen">{{ item.icon }}</mat-icon>
+      <span *ngIf="isSidebarOpen">{{ item.name }}</span>
+    </button>
+  </div>
+
+  <!-- Bouton de déconnexion -->
+  <div class="mt-auto p-4">
+    <button
+    (click)="Logout()"
+      class="w-full text-left flex items-center space-x-3 p-2 text-red-500 hover:bg-gray-100 rounded-md"
+    >
+      <mat-icon>exit_to_app</mat-icon>
+      <span *ngIf="isSidebarOpen">Déconnexion</span>
+    </button>
+  </div>
+</div>
+
