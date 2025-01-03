@@ -34,6 +34,7 @@
     "express": "^4.18.2",
     "file-saver": "^2.0.5",
     "flowbite": "^2.5.2",
+    "image-to-base64": "^2.2.0",
     "jspdf": "^2.5.2",
     "ng2-charts": "^7.0.0",
     "ngx-pagination": "^6.0.3",

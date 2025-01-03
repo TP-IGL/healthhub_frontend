@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Route, Router, RouterLinkActive } from '@angular/router';
 import { Rendezvous } from '../../components/tableaurdv/tableaurdv.component';
 import { CommonModule } from '@angular/common';
@@ -8,16 +8,17 @@ import { AuthState } from '../../services/auth/auth.reducer';
 import { ConsultationModalComponent } from "../../components/consultation-modal/consultation-modal.component";
 import { Consultations, DossierMedicalDetail } from '../../../types';
 import { MedecinService } from '../../services/medecin/medecin.service';
+import { EditModalComponent } from "../../components/edit-modal/edit-modal.component";
 
 @Component({
   selector: 'app-patient-detaile',
-  imports: [CommonModule, SideBarMedecinComponent, ConsultationModalComponent],
+  imports: [CommonModule, SideBarMedecinComponent, ConsultationModalComponent, EditModalComponent],
   templateUrl: './patient-detaile.component.html',
   styleUrl: './patient-detaile.component.css'
 })
 export class PatientDetaileComponent {
   nss: string | null = null;
-
+  role : string = "" 
   authState : AuthState| null = null ; 
   medName : string | null = "ahmed" ; 
   patientId : string | null = null 
@@ -30,9 +31,10 @@ export class PatientDetaileComponent {
     if (jsonData) {
       try {
         this.authState = JSON.parse(jsonData);
-        if (this.authState) {
+        if (this.authState && this.authState.role) {
           this.medName =this.authState?.username
           this.medID = this.authState?.id
+          this.role = this.authState.role
         }
         
       } catch (error) {
@@ -126,4 +128,18 @@ export class PatientDetaileComponent {
     goToAddConsultation() : void {
       this.router.navigate([`/medecin/${this.medID}/patients/addConsultation/${this.patientId}`])
     }
+
+    isEditModalOpen = false;
+  selectedConsultation: any;
+
+  openEditModal(consultation: any) {
+    this.selectedConsultation = consultation;
+    this.isEditModalOpen = true;
+  }
+
+  closeEditModal() {
+    this.isEditModalOpen = false;
+    this.selectedConsultation = null;
+  }
+
 }

@@ -5,10 +5,16 @@ import { CommonModule } from '@angular/common';
 import { TableauexamComponent } from '../../components/tableauexam/tableauexam.component';
 import { FormsModule } from '@angular/forms';
 import { LabService } from '../../services/labs/lab.service';
-import { Examens } from '../../../types';
+import { Examens, RadiologueExamenDetail } from '../../../types';
+import { RadiologueService } from '../../services/radiologue/radiologue.service';
+interface ResultatRadio {
+  type: string;
+  rapport: string;
+  radioImgURL  :string 
+}
 @Component({
   selector: 'app-examen-details',
-  imports: [SideBarRadiologueComponent, CommonModule, TableauexamComponent,FormsModule],
+  imports: [SideBarRadiologueComponent, CommonModule,FormsModule],
   templateUrl: './examen-details.component.html',
   styleUrls: ['./examen-details.component.css']
 })
@@ -27,7 +33,7 @@ description: any;
   activeItem: string = 'Examens';
   Examens : Examens | null = null ; 
   // Constructor combiné
-  constructor(private router: Router, private route: ActivatedRoute , private laboService: LabService) {}
+  constructor(private router: Router, private route: ActivatedRoute , private radioService : RadiologueService) {}
 
   onMenuSelect(menu: string) {
     this.selectedMenu = menu;
@@ -40,7 +46,7 @@ description: any;
         this.router.navigate(['radiologue']);
         break;
       case 'Examens':
-        this.router.navigate([`radiologue/examens/${this.exam.id}/examensdetails`]);
+        this.router.navigate([`radiologue/examens/${this.examId}/examensdetails`]);
         break;
 
       default:
@@ -49,18 +55,6 @@ description: any;
   }
 
   /****************************************** EXAMEN DETAILS ************************** */
-  exam = {
-    id: 1,
-    name: 'Test Radiologique',
-    date: '2024-12-30',
-    Urgence: 'Très Urgent',
-    statut: 'En attente',
-    consultationAssociee: 'Consultation X',
-    resultats: [] as { resultat: string; image: string | null ; description:string}[],
-    patient: 'Joe Doe Abdelhamid',
-    description: ['Fracture détectée dans le bras droit', 'Anomalie pulmonaire détectée']
-  };
-
   resultat: string = '';
   imageFile: File | null = null;
   imagePreview: string | null = null;
@@ -68,63 +62,15 @@ description: any;
   selectedDescription: string | null = null;
   examId : string | null = ''
   ngOnInit(): void {
-    this.examId = this.route.snapshot.paramMap.get('id');
+    this.examId = this.route.snapshot.paramMap.get('ExamenId');
     console.log('exam' , this.examId)
-    this.selectedDescription = this.exam.description[0]
+    this.fetchAllExams(1)
     // t3eyet l  un service pour récupérer l'examen bel l'ID
-    if (this.examId) {
-      this.laboService.getExaminationById(this.examId).subscribe((result)=>console.log("exams" , result))
-    }
     
   }
 
   
-  saveResult() {
-    if (this.resultat.trim() && this.imageFile) {
-      // si ya descriptions dispos
-      if (this.exam.description.length > this.exam.resultats.length) {
-        const descriptionIndex = this.exam.resultats.length; // Utiliser l'index basé sur le nombre de résultats déjà ajoutés
-        
-        const newResult = {
-          resultat: this.resultat,
-          image: this.imagePreview,
-          description: this.exam.description[descriptionIndex], // Associe la description correspondante
-        };
-  
-        this.exam.resultats.push(newResult); // Ajouter le nouveau résultat
-        this.exam.statut = this.exam.resultats.length === this.exam.description.length ? 'Terminé' : 'En cours';
-  
-        console.log('Résultat sauvegardé:', this.resultat);
-        console.log('Description associée:', this.exam.description[descriptionIndex]);
-        console.log('Image associée:', this.imageFile.name);
-  
-        // Réinitialiser les champs
-        this.resultat = '';
-        this.imageFile = null;
-        this.imagePreview = null;
-      } else {
-        console.warn('Toutes les descriptions disponibles ont déjà été utilisées.');
-      }
-    } else {
-      console.warn('Veuillez remplir tous les champs avant de sauvegarder.');
-    }
-  }
-  
-  
-  
-  
 
-  handleImageChange(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.imageFile = file;
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        this.imagePreview = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
-  }
   displayImage(image: string | null) {
     if (image) {
       this.imagePreview = image; // Affiche l'image dans une prévisualisation.
@@ -132,4 +78,77 @@ description: any;
       console.warn('Aucune image associée à ce résultat.');
     }
   }
+
+  exams : RadiologueExamenDetail[] = []
+  filteredExam : RadiologueExamenDetail[] = []
+  fetchAllExams(page: number): void {
+    this.radioService.getExamenes('' , '' , '' , page).subscribe({
+      next: (response) => {
+       
+        if (response ) {
+          this.exams = [...this.exams, ...response];
+          if (response[0].next) {
+            const nextPage = this.getPageNumberFromUrl(response.next);
+            this.fetchAllExams(nextPage);
+          } else {
+            this.filteredExam =this.exams.filter((result)=>{
+              return result.examen.examenID == this.examId
+            });
+          }
+        } else {
+          console.log('No exams found or an error occurred.');
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching exams:', err);
+      }
+    });
+  }
+
+  getPageNumberFromUrl(url: string): number {
+    const match = url.match(/page=(\d+)/);
+    return match ? parseInt(match[1], 10) : 1;
+  }
+
+  typeOptions: string[] = ['radiographie', 'echographie', 'scanner', 'irm'];
+  results: ResultatRadio[] = [];
+  onImageUpload(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string; 
+        this.imagePreview = base64String;
+
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  onSubmit(form: any): void {
+    if (form.valid && this.imagePreview && this.examId) {
+      // Create the ResultatRadio object
+      const formData: ResultatRadio = {
+        type: form.value.type,
+        rapport: form.value.rapport,
+        radioImgURL: this.imagePreview,
+      };
+  
+      this.radioService.createRadiologyResult(this.examId , formData.radioImgURL , formData.type , formData.rapport).subscribe({
+        next : (response)=>{
+          alert("Results submited with sucess")
+        },
+        error : (eror)=>{
+          alert("try agin please")
+        }
+      })
+  
+    }
+  }
+
+  resetForm(form: any): void {
+    form.reset();
+    this.imagePreview = null; // Reset image preview
+  }
+  
 }

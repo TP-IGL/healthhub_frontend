@@ -3,16 +3,18 @@ import { Consultation, Consultations } from '../../../types';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConsultationModalComponent } from "../consultation-modal/consultation-modal.component";
 import { CommonModule } from '@angular/common';
+import { EditModalComponent } from "../edit-modal/edit-modal.component";
 
 @Component({
   selector: 'app-patient-consultations',
-  imports: [ConsultationModalComponent , CommonModule],
+  imports: [ConsultationModalComponent, CommonModule, EditModalComponent],
   templateUrl: './patient-consultations.component.html',
   styleUrl: './patient-consultations.component.css'
 })
 export class PatientConsultationsComponent {
   consultation : Consultations |null = null ;
   @Input() consultations : Consultations[] | null | undefined = null
+  @Input() userRole : "medcine" | "patient" = "medcine"
   constructor(private router:Router, private route: ActivatedRoute) {
   }
   isAscending = true;
@@ -63,6 +65,19 @@ export class PatientConsultationsComponent {
     toggleModalOpen(cons : Consultations) : void {
       this.isModalOpen2 = !this.isModalOpen2
       this.consultation = cons
+    }
+
+    isEditModalOpen = false;
+    selectedConsultation: any;
+  
+    openEditModal(consultation: any) {
+      this.selectedConsultation = consultation;
+      this.isEditModalOpen = true;
+    }
+  
+    closeEditModal() {
+      this.isEditModalOpen = false;
+      this.selectedConsultation = null;
     }
       
 }

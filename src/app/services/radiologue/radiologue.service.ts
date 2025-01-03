@@ -10,7 +10,7 @@ import { RadiologueExamenDetail, RadiologueExamenResponse, RadiologueExamenSumma
 export class RadiologueService {
 
   constructor(private http: HttpClient) {}
-  private radioURL: string = 'http://127.0.0.1:8000/api/radiologue/';
+  private radioURL: string = 'http://127.0.0.1:8000/api/radiologue';
   private getAuthHeaders(): HttpHeaders | null {
     const jsonData = localStorage.getItem('authState');
     let authState: AuthState| null = null;
@@ -23,7 +23,7 @@ export class RadiologueService {
       }
     }
 
-    if (authState?.isAuthenticated && authState?.role === 'admin' && authState?.token) {
+    if (authState?.isAuthenticated && authState?.token) {
       const httpHeader = new HttpHeaders({
         'Authorization': `Token ${authState.token}`,
         'Content-Type': 'application/json'
@@ -41,26 +41,28 @@ export class RadiologueService {
     typeRadio?: string,
     search?: string,
     page: number = 1
-  ): Observable<RadiologueExamenResponse| null> {
+  ): Observable<any> {
     const headers = this.getAuthHeaders();
-    if (!headers) {
-      return of(null);
+    if (headers) {
+      let params = `?page=${page}`;
+      if (status != '') params += `&status=${status}`;
+      if (typeRadio != '') params += `&type_radio=${typeRadio}`;
+      if (search != '') params += `&search=${search}`;
+  
+      return this.http
+        .get<any>(`${this.radioURL}/examens/${params}`, { headers })
+        .pipe(
+          map((response) => response),
+          catchError((error) => {
+            console.error('Error fetching radiologist exams:', error);
+            return of(null);
+          })
+        );
+    }else {
+      return of(null)
     }
 
-    let params = `?page=${page}`;
-    if (status) params += `&status=${status}`;
-    if (typeRadio) params += `&type_radio=${typeRadio}`;
-    if (search) params += `&search=${search}`;
-
-    return this.http
-      .get<RadiologueExamenResponse>(`${this.radioURL}/examen/${params}`, { headers })
-      .pipe(
-        map((response) => response),
-        catchError((error) => {
-          console.error('Error fetching radiologist exams:', error);
-          return of(null);
-        })
-      );
+ 
   }
 
 
@@ -118,7 +120,7 @@ export class RadiologueService {
     };
 
     return this.http
-      .post<ResultatRadio>(`${this.radioURL}/examen/${examenId}/create-resultat-radio/`, body, { headers })
+      .post<ResultatRadio>(`${this.radioURL}/examens/${examenId}/create-resultat-radio/`, body, { headers })
       .pipe(
         map((response) => response),
         catchError((error) => {

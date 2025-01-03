@@ -6,9 +6,10 @@ import { DonutChartComponent } from '../../components/donut-chart/donut-chart.co
 import { Router } from '@angular/router';
 import { SideBarRadiologueComponent } from '../../components/side-bar-radiologue/side-bar-radiologue.component';
 import { FormsModule } from '@angular/forms';
+import { RadiologueService } from '../../services/radiologue/radiologue.service';
 @Component({
   selector: 'app-radiologue',
-  imports: [CommonModule,SideBarComponent,ModaldialogComponent,DonutChartComponent,SideBarRadiologueComponent,FormsModule],
+  imports: [CommonModule,DonutChartComponent,SideBarRadiologueComponent,FormsModule],
   templateUrl: './radiologue.component.html',
   styleUrl: './radiologue.component.css'
 })
@@ -30,7 +31,7 @@ export class RadiologueComponent  {
     radiologuename: string = 'Said'
     selectedMenu = 'Acceuil'; // État pour suivre le menu actif
   
-    constructor(private router: Router) {} 
+    constructor(private router: Router , private radService: RadiologueService ) {} 
   
     activeItem: string = 'Acceuil';
     onMenuSelect(menu: string) {

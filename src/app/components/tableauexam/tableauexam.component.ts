@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'
 import { ModaldialogComponent } from "../modaldialog/modaldialog.component";
+import { RadiologueExamenDetail } from '../../../types';
 
 
 export interface Examen {
@@ -23,9 +24,9 @@ export interface Examen {
   styleUrl: './tableauexam.component.css'
 })
 export class TableauexamComponent {
-   @Input() tableau: Examen[] = [];
-   @Output() detailsRequested = new EventEmitter<number>()
-   onDetailsClick(id: number) {
+   @Input() tableau: RadiologueExamenDetail[] = [];
+   @Output() detailsRequested = new EventEmitter<string>()
+   onDetailsClick(id: string) {
     this.detailsRequested.emit(id); // Émet l'ID de l'examen
   }
   
@@ -39,7 +40,7 @@ export class TableauexamComponent {
     }
   
     // Retourne les rendez-vous de la page actuelle
-    paginatedAppointments(): Examen[] {
+    paginatedAppointments(): RadiologueExamenDetail[] {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
       return this.tableau.slice(startIndex, endIndex);

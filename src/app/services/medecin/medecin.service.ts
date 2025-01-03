@@ -72,7 +72,7 @@ export class MedecinService {
     updateConsultation(
       consultationID: string,
       data: {
-        patient_id: string;
+        nss: string;
         diagnostic: string;
         resume: string;
         status: string;

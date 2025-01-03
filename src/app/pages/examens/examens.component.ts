@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SideBarRadiologueComponent } from '../../components/side-bar-radiologue/side-bar-radiologue.component';
 import { CommonModule } from '@angular/common';
 import { Examen, TableauexamComponent } from '../../components/tableauexam/tableauexam.component';
+import { RadiologueService } from '../../services/radiologue/radiologue.service';
+import { RadiologueExamenDetail } from '../../../types';
 @Component({
   selector: 'app-examens',
   imports: [SideBarRadiologueComponent,CommonModule,TableauexamComponent],
@@ -23,14 +25,21 @@ export class ExamensComponent {
     
       selectedMenu = 'Examens'; // État pour suivre le menu actif
     
-      constructor(private router: Router) {} 
+      constructor(private router: Router , private route : ActivatedRoute , private radioService:RadiologueService) {}
+      id : string | null = "" 
       radiologuename: string = 'Said'
     
       activeItem: string = 'Examens';
+
+      ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
+        this.id = this.route.snapshot.paramMap.get("id")
+        this.fetchAllExams(1)
+      }
       onMenuSelect(menu: string) {
         this.selectedMenu = menu;
         this.activeItem = menu;
-        console.log(`Menu sélectionné : ${menu}`);
     
         // Navigation logique en fonction du menu sélectionné
         
@@ -48,66 +57,53 @@ export class ExamensComponent {
        }
        /**********************************************Tableau exams*************************** */
 
-        tableau: Examen[] = [
-           {
-             id:1,
-             name: 'Neil Sims',
-             patient : 'Neil Sims',
-             statut: 'Terminé',
-             date: '2024-12-26',
-             Urgence : 'trés urgent',
-             consultation:'Consultation 1',
-             
-           },
-           {
-             id:2,
-             name: '',
-             patient : 'Bonnie Green',
-             statut: 'annulé',
-             date: '2024-12-27',
-             Urgence : 'urgent',
-             consultation:'',
-             
-            
-           },
-           {
-             id:3,
-             name: '',
-             patient : 'Bonnie Green',
-             statut: 'En cours',
-             date: '2024-12-27',
-             Urgence : 'normal',
-             consultation:'',
-           },
-           {
-             id:4,
-             name: '',
-             patient : 'Bonnie Green',
-             statut: 'Non traité',
-             date: '2024-12-27',
-             Urgence : 'trés urgent',
-             consultation:'',
-           },
-          ]
           /***************************Recherche********************** */
 
-            // Liste filtrée pour affichage
-  filteredExams = [...this.tableau];
 
   // Méthode de recherche
   onSearch(event: Event) {
     const searchTerm = (event.target as HTMLInputElement).value.trim(); // Supprime les espaces inutiles
-    this.filteredExams = this.tableau.filter((exam) =>
-      exam.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      exam.date.includes(searchTerm)
+    this.filteredExams = this.exams.filter((exam) =>
+      exam.patient.nom.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      exam.examen.createdAt.includes(searchTerm)
     );
   }
   resetSearch() {
-    this.filteredExams = [...this.tableau];
+    this.filteredExams = [...this.exams];
   }
   
   /*********************************************Voir Details************************ */
-  goToDetails(examId: number) {
-    this.router.navigate([`radiologue/examens/${examId}/examensdetails`]);
+  goToDetails(examId: string) {
+    this.router.navigate([`radiologue/${this.id}/examens/${examId}/examensdetails`]);
+  }
+  exams : RadiologueExamenDetail[]  = []
+  filteredExams: RadiologueExamenDetail[] = []
+
+  fetchAllExams(page: number): void {
+    this.radioService.getExamenes('' , '' , '' , page).subscribe({
+      next: (response) => {
+       
+        if (response ) {
+          this.exams = [...this.exams, ...response];
+          if (response[0].next) {
+            const nextPage = this.getPageNumberFromUrl(response.next);
+            this.fetchAllExams(nextPage);
+          } else {
+            this.filteredExams = [...this.exams];
+            console.log('All exams fetched:', this.exams);
+          }
+        } else {
+          console.log('No exams found or an error occurred.');
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching exams:', err);
+      }
+    });
+  }
+
+  getPageNumberFromUrl(url: string): number {
+    const match = url.match(/page=(\d+)/);
+    return match ? parseInt(match[1], 10) : 1;
   }
 }

@@ -21,7 +21,7 @@
       class="w-fit  rounded-full"
     />
     <div class="flex flex-col justify-center">
-      <span class="text-lg font-normal text-[#000000]" *ngIf="isSidebarOpen">{{radiologuename}}</span>
+      <span class="text-lg font-normal text-[#000000]" *ngIf="isSidebarOpen">{{radName}}</span>
       <span class="text-lg font-normal text-[#757575]" *ngIf="isSidebarOpen">Radiologue</span>
     </div>
   </div>
@@ -55,7 +55,7 @@
   <!-- Bouton de déconnexion -->
   <div class="mt-auto p-4">
     <button
-     
+    (click)="logout()"
       class="w-full text-left flex items-center space-x-3 p-2 text-red-500 hover:bg-gray-100 rounded-md"
     >
       <mat-icon>exit_to_app</mat-icon>

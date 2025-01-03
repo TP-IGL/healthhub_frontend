@@ -54,12 +54,12 @@
                 </th>
                 <th scope="col" class="px-6 py-3">Médecin</th>
                 <th scope="col" class="px-6 py-3">Status</th>
-                <th scope="col" class="px-6 py-3">Edit</th>
+                <th scope="col" class="px-6 py-3" *ngIf="role == 'medecin' " >Edit</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let cons of getUser()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer" (click)="toggleModalOpen(cons)">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" >
+              <tr *ngFor="let cons of getUser()" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white" (click)="toggleModalOpen(cons)" >
                   <img src="/assets/pic.png" alt="User photo" class="inline w-8 h-8 rounded-full mr-2" />
                   {{ cons.dateConsultation}}
                 </th>
@@ -69,7 +69,7 @@
                 </td>
                 <td class="px-6 py-4">{{ cons.medecin_name }}</td>
                 <td class="px-6 py-4">{{ cons.status }}</td>
-                <td class="px-6 py-4 text-center items-center">
+                <td *ngIf="role == 'medecin' " class="px-6 py-4 text-center items-center" (click)="openEditModal(cons)">
                   <div class="flex items-center space-x-1">
                     <div class="cursor-pointer"><img src="/assets/edit.png" width="40px" height="12px" /></div>
                   </div>
@@ -87,7 +87,11 @@
         </div>
       </div>
     </div>
-  
+    <app-edit-modal
+  *ngIf="isEditModalOpen"
+  [consultation]="selectedConsultation"
+  (close)="closeEditModal()"
+></app-edit-modal>
     <!-- Modal -->
     <div *ngIf="isModalOpen2" class="pt-20" >
       <div>
