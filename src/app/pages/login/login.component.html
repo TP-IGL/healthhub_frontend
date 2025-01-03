@@ -1,17 +1,11 @@
 <div class="min-h-screen bg-no-repeat bg-fixed bg-bottom bg-contain overflow-hidden" style="background-image: url('assets/logg.png');">
   <!-- Barre de navigation -->
-  <nav class="bg-white shadow-md w-full py-4">
-    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+  <nav class="bg-white w-full py-4 i">
+    <div class="max-w-7xl mx-auto px-6 flex justify-center items-center">
       <!-- Logo -->
       <img src="assets/logo.svg" alt="Logo" class="w-auto h-[13vh]">
 
-      <!-- Bouton "S'inscrire" -->
-      <div class="flex items-center space-x-2">
-        <p class="text-sm text-gray-700">Vous n'avez pas de compte ?</p>
-        <button class="text-white font-semibold py-2 px-6 rounded-lg bg-[#5932EA] hover:bg-[#4625c3] focus:outline-none">
-          S'inscrire
-        </button>
-      </div>
+
     </div>
   </nav>
 
@@ -47,7 +41,6 @@
           <button type="submit" class="w-full bg-[#5932EA] text-white py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Se connecter</button>
         </form>
 
-        <p class="mt-4 text-center text-sm text-gray-600">Pas encore de compte ? <a href="#" class="text-sm text-[#5932EA] hover:underline">S'inscrire</a></p>
 
         <p *ngIf="error"  class="p-2 mb-4 text-sm text-red-800 rounded-lg  dark:bg-gray-800 dark:text-red-400" role="alert">
            {{error}}

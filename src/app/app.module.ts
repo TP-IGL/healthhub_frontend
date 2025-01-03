@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './services/auth/auth.reducer';
 import { AuthService } from './services/auth/auth.service';
+import { QRCodeComponent } from 'angularx-qrcode';
 @NgModule({
   declarations: [
     
@@ -19,7 +20,7 @@ import { AuthService } from './services/auth/auth.service';
     StoreModule.forRoot({ auth : authReducer }),
     BrowserAnimationsModule , 
     BrowserAnimationsModule ,
-    
+    QRCodeComponent
    // Ajout du module MatIconModule
   ],
   providers: [],

@@ -9,6 +9,7 @@ import { AuthState } from '../../services/auth/auth.reducer';
 import { logout } from '../../services/auth/auth.actions';
 import { UserService } from '../../services/patients/user.service';
 import { AdminUser, UsersResponseFront } from '../../../types';
+import { error } from 'node:console';
 
 @Component({
   selector: 'app-dashboard',
@@ -153,6 +154,7 @@ export class DashboardComponent implements OnInit {
 
   // Delete a user from the dynamic list
   deleteUser(id: number) {
+    this.CreateUserService.deleteUser(id).subscribe((results)=>{console.log(results)})
     this.results = this.results.filter((user) => user.id !== id);
   }
 
