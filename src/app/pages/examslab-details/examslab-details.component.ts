@@ -1,15 +1,21 @@
-import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SideBarLaborantinComponent } from '../../components/side-bar-laborantin/side-bar-laborantin.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Platform } from '@angular/cdk/platform';
-import { Chart, ChartConfiguration, ChartData } from 'chart.js';
+import { 
+  Chart, 
+  ChartConfiguration, 
+  ChartData, 
+  CategoryScale,
+  LinearScale,
+  BarController,
+  BarElement
+} from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { LabService } from '../../services/labs/lab.service';
 import { 
   Examens, 
-  ExamRequired, 
   healthMetricsCreate, 
   ResultatLabo, 
   ResultatLaboCreate, 
@@ -17,7 +23,14 @@ import {
   HealthMetrics 
 } from '../../../types';
 
-Chart.register(ChartDataLabels);
+// Register required Chart.js components
+Chart.register(
+  CategoryScale,
+  LinearScale,
+  BarController,
+  BarElement,
+  ChartDataLabels
+);
 
 @Component({
   selector: 'app-examslab-details',
@@ -26,7 +39,7 @@ Chart.register(ChartDataLabels);
   styleUrl: './examslab-details.component.css',
   standalone: true
 })
-export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
+export class ExamslabDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   // Chart references
   @ViewChild('pressureChart') pressureChart!: ElementRef<HTMLCanvasElement>;
   @ViewChild('cholesterolChart') cholesterolChart!: ElementRef<HTMLCanvasElement>;
@@ -83,6 +96,15 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
     this.initializeRouteParams();
   }
 
+  ngAfterViewInit() {
+    this.canvasesReady = true;
+    this.initChartsIfReady();
+  }
+
+  ngOnDestroy(): void {
+    this.clearExistingCharts();
+  }
+
   private initializeRouteParams(): void {
     this.examId = this.route.snapshot.paramMap.get('id');
     this.nss = this.route.snapshot.paramMap.get('nss');
@@ -127,52 +149,46 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngAfterViewInit() {
-    this.canvasesReady = true;
-    this.initChartsIfReady();
-  }
-
   private initChartsIfReady(): void {
     if (!this.isDataLoaded || !this.canvasesReady) {
       return;
     }
 
-    const pressureCanvas = this.pressureChart?.nativeElement;
-    const cholesterolCanvas = this.cholesterolChart?.nativeElement;
-    const glucoseCanvas = this.glucoseChart?.nativeElement;
-
+    // Clear existing charts before creating new ones
     this.clearExistingCharts();
 
-    if (pressureCanvas && cholesterolCanvas && glucoseCanvas) {
-      this.initChart(pressureCanvas, 'Pression artérielle (mmHg)', 'pression_arterielle');
-      this.initChart(cholesterolCanvas, 'Niveaux de Cholestérol (mg/dL)', 'niveaux_cholesterol');
-      this.initChart(glucoseCanvas, 'Niveaux de Glucose (mg/dL)', 'glucose');
-    }
+    // Small delay to ensure DOM is ready
+    setTimeout(() => {
+      const pressureCanvas = this.pressureChart?.nativeElement;
+      const cholesterolCanvas = this.cholesterolChart?.nativeElement;
+      const glucoseCanvas = this.glucoseChart?.nativeElement;
+
+      if (pressureCanvas && cholesterolCanvas && glucoseCanvas) {
+        this.initChart(pressureCanvas, 'Pression artérielle (mmHg)', 'pression_arterielle');
+        this.initChart(cholesterolCanvas, 'Niveaux de Cholestérol (mg/dL)', 'niveaux_cholesterol');
+        this.initChart(glucoseCanvas, 'Niveaux de Glucose (mg/dL)', 'glycemie');
+      }
+    }, 0);
   }
 
   private clearExistingCharts(): void {
-    if (this.pressureChartInstance) {
-      this.pressureChartInstance.destroy();
-      this.pressureChartInstance = null;
-    }
-    if (this.cholesterolChartInstance) {
-      this.cholesterolChartInstance.destroy();
-      this.cholesterolChartInstance = null;
-    }
-    if (this.glucoseChartInstance) {
-      this.glucoseChartInstance.destroy();
-      this.glucoseChartInstance = null;
-    }
+    [this.pressureChartInstance, this.cholesterolChartInstance, this.glucoseChartInstance].forEach(chart => {
+      if (chart) {
+        chart.destroy();
+      }
+    });
+    
+    this.pressureChartInstance = null;
+    this.cholesterolChartInstance = null;
+    this.glucoseChartInstance = null;
   }
-
-  
 
   initChart(ctx: HTMLCanvasElement, label: string, metricType: string) {
     const filteredResults = this.exams.filter(result =>
       result.health_metrics.some(metric => metric.metric_type === metricType)
     );
 
-    const labels = filteredResults.map(result => new Date(result.dateAnalyse).toLocaleString());
+    const labels = filteredResults.map(result => new Date(result.dateAnalyse).toISOString().split('T')[0]);
     const data = filteredResults.map(result => {
       const value = result.health_metrics.find(metric => 
         metric.metric_type === metricType
@@ -180,20 +196,18 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
       return typeof value === 'string' ? parseFloat(value) : value || 0;
     });
 
-    const chartData: ChartData<'bar'> = {
-      labels: labels,
-      datasets: [{
-        label: label,
-        data: data,
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 1,
-      }]
-    };
-
-    const chartConfig:ChartConfiguration<'bar'> = {
+    const chartConfig: ChartConfiguration<'bar'> = {
       type: 'bar',
-      data: chartData,
+      data: {
+        labels: labels,
+        datasets: [{
+          label: label,
+          data: data,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1,
+        }]
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -211,7 +225,7 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
         },
         scales: {
           x: {
-            type: 'category',
+            display: true,
             title: {
               display: true,
               text: 'Date'
@@ -225,6 +239,7 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
             }
           },
           y: {
+            display: true,
             title: {
               display: true,
               text: label
@@ -239,8 +254,6 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
     this.assignChartInstance(metricType, chart);
   }
 
-
-
   private assignChartInstance(metricType: string, chart: Chart): void {
     switch (metricType) {
       case 'pression_arterielle':
@@ -249,12 +262,11 @@ export class ExamslabDetailsComponent implements OnInit, AfterViewInit {
       case 'niveaux_cholesterol':
         this.cholesterolChartInstance = chart;
         break;
-      case 'glucose':
+      case 'glycemie':
         this.glucoseChartInstance = chart;
         break;
     }
   }
-
 
   updateChart(chartInstance: Chart | null, newData: number[], newLabels: string[]) {
     if (chartInstance) {

@@ -88,6 +88,7 @@ export class ActivityDetailsComponent {
               {
                 next : (res)=>{
                   if (res) {
+                    console.log(res)
                     alert("Activite validated")
                   }else {
                     alert("try again")
@@ -116,6 +117,7 @@ fetchAllExams(page: number): void {
         if (parent) {
           this.exam = parent.activities.find((activity) => activity.id === this.id);
           this.consultation = parent.consultation;
+          console.log(this.exam)
           this.patient = parent.patient;
         } else {
           console.log('No matching activity found for the given ID.');
