@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { CompletedActivityResponse, NurseActivityResponse, ValidateActivite } from '../../../types';
+import { CompletedActivityResponse, NurseActivityDetail, NurseActivityResponse, ValidateActivite } from '../../../types';
 import { AuthState } from '../auth/auth.reducer';
 
 @Injectable({
@@ -42,20 +42,20 @@ export class InfermierService {
     status?: string,
     typeActivite?: string,
     search?: string,
-    page: string = '1'
-  ): Observable<NurseActivityResponse | null> {
+    page: number= 1
+  ): Observable<NurseActivityDetail[] | null> {
     const headers = this.getAuthHeaders();
     if (!headers) {
       return of(null);
     }
 
     let params = `?page=${page}`;
-    if (status) params += `&status=${status}`;
-    if (typeActivite) params += `&type_activite=${typeActivite}`;
-    if (search) params += `&search=${search}`;
+    if (status != '') params += `&status=${status}`;
+    if (typeActivite != '') params += `&type_activite=${typeActivite}`;
+    if (search != '') params += `&search=${search}`;
 
     return this.http
-      .get<NurseActivityResponse>(`${this.nurseUrl}${params}`, { headers })
+      .get<NurseActivityDetail[]>(`${this.nurseUrl}${params}`, { headers })
       .pipe(
         map((response) => response),
         catchError((error) => {
@@ -106,7 +106,7 @@ export class InfermierService {
 
 
   // start activiy
-  startActivity(activityId: number): Observable<boolean> {
+  startActivity(activityId: string): Observable<boolean> {
     const headers = this.getAuthHeaders();
     if (!headers) {
       return of(false);
@@ -124,7 +124,7 @@ export class InfermierService {
   }
 
   // validate acitvity 
-  validateActivity(activityId: number, nurseObservations: string): Observable<ValidateActivite | null> {
+  validateActivity(activityId: string, nurseObservations: string): Observable<ValidateActivite | null> {
     const headers = this.getAuthHeaders();
     if (!headers) {
       return of(null);

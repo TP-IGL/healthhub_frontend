@@ -44,21 +44,23 @@ export interface PatientCreate {
 // infermirr
   export interface PatientNurse {
     id: number;
-    name: string;
+    nom: string;
+    nss : string
   }
   
-  export interface NurseActivity {
-    id: number;
-    activityType: string;
-    date: string;
-  }
   
   export interface NurseActivityDetail {
     patient: PatientNurse;
-    activities: any[];
+    activities: Activity[];
     consultation: NurseActivity;
   }
-  
+  export interface Activity {
+    id  : string
+    status : string
+    doctors_details : string
+    nurse_observations : string 
+    createdAt : string
+  }
   export interface NurseActivityResponse {
     count: number;
     next: string | null;
@@ -117,7 +119,7 @@ export interface PatientCreate {
     patient: PatientSummary;
     consultation: RadiologueConsultationSummary;
     examen: RadiologueExamenSummary;
-    resultatRadio: ResultatRadio;
+    resultatRadio: ResultatRadio[];
   }
   
   export interface RadiologueExamenResponse {
@@ -444,4 +446,57 @@ export interface PatientCreate {
     unit : string
   }
 
+  export interface InfermierList {
+    user_id: string; // User ID
+    name: string; // Name
+    shift: 'jour' | 'nuit' | 'rotation'; // Shift (can be 'jour', 'nuit', or 'rotation')
+    readOnly: true; // Read-only flag
+  }
+
+  export interface ActiviteInfermierCreate {
+    consultation: string; 
+    infermier: string; 
+    typeActivite: 'administration_medicament' | 'soins' | 'observation' | 'prelevement' | 'autre'; // Enum
+    doctors_details: string; 
+    status: 'planifie' | 'en_cours' | 'termine';
+  }
+  
+  
+
+
+  //  for nurse 
+  export interface NurseActivity {
+    consultationID: string; // UUID - ReadOnly
+    dossier: string; // UUID - Required
+    dateConsultation: string; // Date - Required
+    diagnostic: string; // Required - MinLength: 1
+    resume: string; // Required - MinLength: 1
+    status: 'planifie' | 'en_cours' | 'termine' | 'annule'; // Enum - Required
+    ordonnance?: NurseOrdonnance; // Optional NurseOrdonnance
+  }
+  
+  export interface NurseOrdonnance {
+    ordonnanceID: string; // UUID - ReadOnly
+    valide: boolean; // Indicates if the ordonnance is valid
+    dateCreation: string; // Date - ReadOnly
+    dateExpiration?: string; // Date - Nullable
+    medicaments?: NurseOrdonnanceMedicament[]; // ReadOnly array of NurseOrdonnanceMedicament
+  }
+  
+  export interface NurseOrdonnanceMedicament {
+    ordonnanceMedicamentID: string; // UUID - ReadOnly
+    medicament: NurseMedicament; // Nested NurseMedicament - ReadOnly
+    medicament_id: string; // UUID - Required
+    duree: string; // Required - MaxLength: 50, MinLength: 1
+    dosage: 'faible' | 'moyen' | 'fort'; // Enum - Required
+    frequence: string; // Required - MaxLength: 50, MinLength: 1
+    instructions: string; // Required - MinLength: 1
+  }
+  
+  export interface NurseMedicament {
+    medicamentID: string; // UUID - ReadOnly
+    nom: string; // Required - MaxLength: 255, MinLength: 1
+    type: 'comprime' | 'sirop' | 'injection' | 'pommade' | 'autre'; // Enum - Required
+    description: string; // Required - MinLength: 1
+  }
 

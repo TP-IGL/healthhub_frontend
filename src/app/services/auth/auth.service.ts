@@ -47,6 +47,8 @@ export class AuthService {
       this.router.navigate([`radiologue/${id}`]); 
     } else if (role == 'laborantin') {
       this.router.navigate([`laborantin/${id}`])
+    }else if (role == "infermier" ) {
+      this.router.navigate([`infermier/${id}`])
     }
   }
   getToken(): string | null {

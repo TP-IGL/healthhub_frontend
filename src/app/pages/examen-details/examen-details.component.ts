@@ -94,6 +94,8 @@ description: any;
             this.filteredExam =this.exams.filter((result)=>{
               return result.examen.examenID == this.examId
             });
+            console.log('exams')
+            console.log(this.filteredExam)
           }
         } else {
           console.log('No exams found or an error occurred.');

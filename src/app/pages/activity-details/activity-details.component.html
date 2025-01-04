@@ -1,0 +1,90 @@
+<div class="flex flex-col sm:flex-row min-h-screen bg-gray-200 overflow-hidden">
+  <!-- Sidebar -->
+ <app-side-bar-infermier
+ [activeItem]="activeItem"
+ [laboname]="laboname"
+ 
+  (isSidebarOpenR)="toggleSidebar($event)" 
+  (menuSelected)="onMenuSelect($event)"
+ class="min-h-screen fixed top-0 left-0 bottom-0 transform transition-transform duration-300"
+ [ngClass]="{
+   '-translate-x-full sm:translate-x-0': !isSidebarOpen,
+   'translate-x-0': isSidebarOpen
+ }">
+
+
+ </app-side-bar-infermier>
+ <main 
+   class="flex-1 p-4 sm:p-6 space-y-6 transition-all ease-in-out duration-300"
+   [ngClass]="{
+    'ml-0 sm:ml-20': isSidebarOpen,
+    'ml-0 sm:ml-[250px]': !isSidebarOpen
+   }">
+      <div class="bg-white p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all">
+        <h2 class="text-3xl font-bold text-blue-700 mb-6 border-b-4 border-blue-300 pb-2">
+          📋 Détails de l'activité
+        </h2>
+        <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-800">
+          <p><strong class="text-blue-500">ID de l'activité :</strong>{{exam?.id}}</p>
+          <p><strong class="text-blue-500">Consultation :</strong> {{ consultation?.consultationID }}</p>
+          <p><strong class="text-blue-500">Patient :</strong> {{ patient?.nom }}</p>
+          <p><strong class="text-blue-500">Type de l'activité :</strong> {{ exam?.status }}</p>
+          <p><strong class="text-blue-500">État :</strong> {{ consultation?.status }}</p>
+          <p><strong class="text-blue-500">Détails du médecin :</strong> {{exam?.doctors_details }}</p>
+          <p><strong class="text-blue-500">Date de création :</strong> {{ consultation?.dateConsultation }}</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-md shadow-sm felx flex-col">
+
+        <div *ngIf="exam?.status === 'Terminée'"  class="  p-6 flex  flex-col">
+          <h3 class="text-xl font-semibold mb-4">
+            📝 <strong>Observation</strong>
+          </h3>
+          <p>{{ exam?.nurse_observations || "no observation"  }}</p>
+        </div>
+        <!-- conditionnn pour afficher-->
+        <div *ngIf="exam?.status === 'planifie' || exam?.status === 'En Cours'" class="  p-6 flex justify-center items-center">
+          <button
+           class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:shadow-xl hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105"
+            (click)="openPopup()"
+          >
+          ➕Ajouter une observation
+          </button>
+        </div>
+    
+        
+      </div>
+    
+      <!-- Pop-up -->
+      <div
+        *ngIf="showPopup"
+        class="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center"
+      >
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h3 class="text-xl font-bold mb-4">Ajouter une observation</h3>
+          <textarea
+            [(ngModel)]="observationText"
+            rows="4"
+            class="w-full p-2 border rounded-lg"
+            placeholder="Saisissez votre observation ici..."
+          ></textarea>
+          <div class="mt-4 flex justify-between">
+            <button
+              type="button"
+              class="bg-gray-500 text-white px-4 py-2 rounded-lg"
+              (click)="closePopup()"
+            >
+              Annuler
+            </button>
+            <button
+              type="button"
+              class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              (click)="saveObservation()"
+            >
+              Sauvegarder
+            </button>
+          </div>
+        </div>
+      </div>
+ </main>
+</div>

@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthState } from '../auth/auth.reducer';
-import { ConsultationCreateUpdate, Consultations, DossierMedicalDetail, Examens, ExaminationCreate, LaborantinListResponse, MedicationInput, OrdonnanceCreate, OrdonnanceMedicamentCreate, OrdonnancesListResponse, PatientsListResponse, prescriptionsResponse, RadiologueListResponse } from '../../../types';
-import { Observable, of } from 'rxjs';
+import { ActiviteInfermier, ActiviteInfermierCreate, ConsultationCreateUpdate, Consultations, DossierMedicalDetail, Examens, ExaminationCreate, InfermierList, LaborantinListResponse, MedicationInput, OrdonnanceCreate, OrdonnanceMedicamentCreate, OrdonnancesListResponse, PatientsListResponse, prescriptionsResponse, RadiologueListResponse } from '../../../types';
+import { catchError, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +13,7 @@ export class MedecinService {
   private laborantinURL: string = 'http://127.0.0.1:8000/api/medecin/hospital/' 
   private docURL :string = 'http://127.0.0.1:8000/api/medecin/doctors/'
   private searchURL : string = 'http://127.0.0.1:8000/api/medecin/medecin/patients/search/'
+  private baseUrl : string = "http://127.0.0.1:8000/api/medecin/infermier/"
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders | null {
@@ -177,6 +178,28 @@ export class MedecinService {
     return this.http.get<RadiologueListResponse>(url, { headers });
   
   }
+
+  // get infermiers 
+  getInfermiers(hospitalID: string, page: number = 1): Observable<{ count: number; next: string | null; previous: string | null; results: InfermierList[] } | null> {
+    const headers = this.getAuthHeaders();
+    
+    // If headers are not found, return an observable of null
+    if (!headers) {
+      return of(null);
+    }
+  
+    // Construct the URL with pagination
+    const url = `http://localhost:8000/api/medecin/hospital/${hospitalID}/infermiers/?page=${page}`;
+  
+    // Make the HTTP GET request and return the observable
+    return this.http.get<{ count: number; next: string | null; previous: string | null; results: InfermierList[] }>(url, { headers })
+      .pipe(
+        catchError(() => of(null)) 
+      );
+  }
+  
+
+
   // get dossize 
   getDossierMedicalDetail(type: string, id: string): Observable<DossierMedicalDetail> {
     const headers = this.getAuthHeaders();
@@ -189,4 +212,15 @@ export class MedecinService {
     return this.http.get< DossierMedicalDetail  >(url, { headers });
   }
 
+
+  createActiviteInfermier(data: ActiviteInfermierCreate): Observable<ActiviteInfermierCreate |null> {
+    const headers = this.getAuthHeaders()
+    if (headers) {
+      
+      return this.http.post<ActiviteInfermierCreate>(this.baseUrl, data , {headers : headers});
+    }else {
+      return of(null)
+    }
+
+  }
 }

@@ -25,6 +25,8 @@ import { ExamensComponent } from './pages/examens/examens.component';
 import { ExamenDetailsComponent } from './pages/examen-details/examen-details.component';
 import { LaborantinComponent } from './pages/laborantin/laborantin.component';
 import { ExamslabDetailsComponent } from './pages/examslab-details/examslab-details.component';
+import { InfermierComponent } from './pages/infermier/infermier.component';
+import { ActivityDetailsComponent } from './pages/activity-details/activity-details.component';
 
 export const routes: Routes = [
   // Public routes
@@ -138,6 +140,14 @@ export const routes: Routes = [
   path: 'laborantin/:labid/exams/:id/:nss', component: ExamslabDetailsComponent ,
   canActivate: [AuthGuard],
   data : {role : 'laborantin'}
+},
+{
+  path: 'infermier/:id', component: InfermierComponent,  canActivate: [AuthGuard],
+  data : {role : 'infermier'}
+},
+{
+  path: 'infermier/:id/activitydetails/:activityId', component: ActivityDetailsComponent ,canActivate: [AuthGuard],
+  data : {role : 'infermier'}
 },
 
 

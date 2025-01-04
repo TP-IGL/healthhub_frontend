@@ -50,7 +50,7 @@
             <p><strong>ID :</strong> {{ filteredExam[0].examen.examenID }}</p>
             <p><strong>Nom :</strong> {{ filteredExam[0].patient.nom + " " + filteredExam[0].patient.prenom}}</p>
             <p><strong>Date :</strong> {{ filteredExam[0].examen.createdAt}}</p>
-            <p><strong>Statut :</strong> {{ filteredExam[0].examen.type }}</p>
+            <p><strong>Statut :</strong> {{ filteredExam[0].examen.type   }}</p>
           </div>
         </div>
     
@@ -66,7 +66,7 @@
         </ul>
       </div>
     <!-- Result Form -->
-    <div class="bg-white rounded-lg shadow p-6 space-y-4">
+    <div class="bg-white rounded-lg shadow p-6 space-y-4" *ngIf="filteredExam[0].resultatRadio.length == 0 ">
       <form (ngSubmit)="onSubmit(resultForm)" #resultForm="ngForm" class="space-y-6">
         <!-- Type Dropdown -->
         <div>
@@ -123,5 +123,24 @@
         </div>
       </form>
     </div>
+    <div *ngIf="filteredExam?.[0]?.resultatRadio?.length " class="bg-white rounded-lg shadow p-6 space-y-4">
+      <div>
+        <img
+          *ngFor="let rad of filteredExam[0].resultatRadio"
+          [src]="rad.radioImgURL"
+          alt="Radiology Result"
+          class="my-2"
+        />
+      </div>
+      <div>
+        <div class="font-bold">
+          Radiologue Details:
+        </div>
+        <ul>
+          <li *ngFor="let rad of filteredExam[0].resultatRadio">{{ rad.rapport }}</li>
+        </ul>
+      </div>
+    </div>
+    
   </main>
 </div>
